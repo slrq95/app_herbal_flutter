@@ -1,4 +1,5 @@
 import 'package:app_herbal_flutter/src/screens/calendar_screen.dart';
+import 'package:app_herbal_flutter/src/screens/dashboard_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_screen.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,11 @@ class PaginaPrincipal extends StatelessWidget {
     int currentIndex = provider.bottomNavIndex;
 
     List<Widget> screens = const <Widget>[
-      PantallaFichaClinica(),
+      DashboardScreen(),
+      PantientPage(),
+      
       PantallaCalendario(),
+     
     ];
 
     return Scaffold(
@@ -43,9 +47,9 @@ class PaginaPrincipal extends StatelessWidget {
                   icon: Hero(
                     tag: 'signOutIcon',
                     child: Image.asset(
-                      'lib/src/assets/images/exit.png', 
-                      width: 60.0,
-                      height: 60.0,
+                      'lib/src/assets/images/sign_out.png', 
+                      width: 90.0,
+                      height:90.0,
                     ),
                   ),
                   iconSize: 60.0,
@@ -56,25 +60,32 @@ class PaginaPrincipal extends StatelessWidget {
           Expanded(child: screens[currentIndex]),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF1E1E1E), // ✅ Bottom Nav background
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        currentIndex: currentIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard_customize_rounded),
-            label: 'Pacientes',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month_rounded),
-            label: 'Calendario',
-          ),
-        ],
-        onTap: (int index) {
-          provider.updateBottonNavIndex(index);
-        },
+bottomNavigationBar: Container(
+  height: 140.0, // Set your desired height here
+  child: BottomNavigationBar(
+    backgroundColor: const Color(0xFF1E1E1E), // Bottom Nav background
+    selectedItemColor: Colors.white,
+    unselectedItemColor: Colors.grey,
+    currentIndex: currentIndex,
+    items: const <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: Icon(Icons.dashboard_sharp),
+        label: 'Dashboard',
       ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.person),
+        label: 'Pacientes',
+      ),
+      BottomNavigationBarItem(
+        icon: Icon(Icons.calendar_month_rounded),
+        label: 'Calendario',
+      ),
+    ],
+    onTap: (int index) {
+      provider.updateBottonNavIndex(index);
+    },
+  ),
+),
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:app_herbal_flutter/src/screens/dashboard_screen.dart';
 import 'package:app_herbal_flutter/src/screens/login_screen.dart';
 
 import 'package:app_herbal_flutter/src/screens/options_screen.dart';
@@ -16,9 +17,12 @@ switch(settings.name){
   case'/signin':
   return MaterialPageRoute(builder: (_) => const SigninPage());  
   
-  case'/PantallaFichaClinica':
-    return MaterialPageRoute(builder: (_) => const PantallaFichaClinica());
+  case'/PatientPage':
+    return MaterialPageRoute(builder: (_) => const PantientPage());
   
+  case'/DasboardPage':
+    return MaterialPageRoute(builder: (_) => const DashboardScreen());
+    
 
 
   default:

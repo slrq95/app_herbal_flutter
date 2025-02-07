@@ -1,91 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
+
 class CustomInput extends StatelessWidget {
-  final List<TextInputFormatter>? inputFormatters;
   final TextEditingController? controller;
-  final Function(String)? onChanged;
-  final EdgeInsetsGeometry? padding;
-  final TextInputType? keyboardType;
-  final GestureTapCallback? onTap;
-  final TextStyle? style;
-  final FocusNode? focusNode;
-  final bool? obscureText;
-  final bool? rounded;
-  final bool? isDense;
-  final bool? autofocus;
-  final String? labelText;
-  final TextStyle? labelStyle;
-  final String? hintText;
-  final String? icon;
-  final double? width;
-  final double? height;
-  final int? maxLines;
-  final Color? fillColor;
-  final Color? borderColor;
-  final Color? iconColor;
-  final TextAlign? textAlign;
+  final TextInputType keyboardType;
+  final bool obscureText;
+  final String labelText;
+  final String hintText;
+  final IconData icon;
+  final Color borderColor;
+  final Color iconColor;
+  final Color fillColor;
+  final double width;  
+  final double height; 
+  final double fontSize; 
+  final FormFieldValidator<String>? validator;
+  final FormFieldSetter<String>? onSaved;
 
   const CustomInput({
     super.key,
-    required this.controller,
-    this.keyboardType,
-    this.onChanged,
-    this.style,
-    this.focusNode,
-    this.padding,
-    this.onTap,
-    this.obscureText,
-    this.rounded,
-    this.isDense,
-    this.autofocus,
-    this.labelText,
-    this.labelStyle,
-    this.hintText,
-    this.icon,
-    this.width,
-    this.height,
-    this.maxLines,
-    this.fillColor,
-    this.borderColor,
-    this.iconColor,
-    this.textAlign,
-    this.inputFormatters,
+    this.controller,
+    required this.keyboardType,
+    this.obscureText = false,
+    required this.labelText,
+    required this.hintText,
+    required this.icon,
+    required this.borderColor,
+    required this.iconColor,
+    required this.fillColor,
+    this.width = double.infinity, 
+    this.height = 90.0, 
+    this.fontSize = 24.0, 
+    this.validator,
+    this.onSaved,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10.0),
-      child: TextField(
-        onTap: onTap,
-        autofocus: autofocus ?? false,
-        focusNode: focusNode,
+    return SizedBox(
+      width: width, 
+      height: height, 
+      child: TextFormField(
         controller: controller,
         keyboardType: keyboardType,
-        inputFormatters: inputFormatters,
-        maxLines: maxLines ?? 1,
-        style: style ?? const TextStyle(
-          color: CustomTheme.lettersColor,
-          fontSize: 16,
-        ),
-        onChanged: onChanged,
-        textAlign: textAlign ?? TextAlign.start,
+        obscureText: obscureText,
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: labelStyle,
-          hintText: hintText,
-          fillColor: CustomTheme.containerColor,
-          filled: true,
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(rounded == true ? 30.0 : 5.0),
-            borderSide: BorderSide(color: borderColor ?? Colors.white),
+            borderRadius: BorderRadius.circular(10.0),
           ),
- 
+          filled: true,
+          fillColor: fillColor,
+          labelText: labelText,
+          hintText: hintText,
+          prefixIcon: Icon(icon, color: iconColor),
+          labelStyle: TextStyle(color: CustomTheme.lettersColor, fontSize: fontSize), // Font size applied ✅
         ),
-        obscureText: obscureText ?? false,
+        style: TextStyle(color: CustomTheme.lettersColor, fontSize: fontSize), // Font size applied ✅
+        validator: validator,
+        onSaved: onSaved,
       ),
     );
   }

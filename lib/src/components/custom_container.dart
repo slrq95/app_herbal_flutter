@@ -23,7 +23,7 @@ class CustomContainer extends StatelessWidget {
 
     // Responsive size - ensures the container has a nice proportion
     double containerWidth = width ?? screenWidth * 0.4;
-    double containerHeight = height ?? screenHeight * 0.2;
+    double containerHeight = height ?? screenHeight * 0.3;
 
     return Container(
       width: containerWidth,

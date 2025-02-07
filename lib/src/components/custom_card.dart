@@ -22,7 +22,7 @@ class CustomCard extends StatelessWidget {
 
     return Container(
       width: double.infinity, // Takes full width
-      height: height ?? screenHeight * 0.15, // Default height is 15% of screen height
+      height: height ?? screenHeight * 0.10, // Default height is 10% of screen height
       padding: padding ?? const EdgeInsets.all(16.0), // Default padding
       decoration: BoxDecoration(
         color: color,

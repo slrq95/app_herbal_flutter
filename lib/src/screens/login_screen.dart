@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
+import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/tools/error_dialog.dart';
 import 'package:app_herbal_flutter/src/tools/custom_error.dart';
 import 'package:app_herbal_flutter/src/screens/splash_page.dart';
+import 'package:app_herbal_flutter/src/components/custom_input.dart';
+import 'package:app_herbal_flutter/src/components/custom_button.dart'; // ✅ Import CustomButton
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -13,8 +16,43 @@ class SigninPage extends StatefulWidget {
 
 class SigninPageState extends State<SigninPage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
   String? _email, _password;
+void _showForgotPasswordDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: CustomTheme.containerColor, // Dark theme background
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0), // Rounded corners
+        ),
+        title: const Text(
+          'Recuperar contraseña',
+          style: TextStyle(color: CustomTheme.lettersColor, fontSize: 36, fontWeight: FontWeight.bold),
+        ),
+        content: const Text(
+          'Por favor, comuníquese con soporte técnico para recuperar su contraseña.',
+          style: TextStyle(color: CustomTheme.lettersColor, fontSize: 28),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
 
   void _submit() async {
     setState(() {
@@ -33,7 +71,7 @@ class SigninPageState extends State<SigninPage> {
       // Make the Firebase authentication request
       final response = await authService.signIn(_email!, _password!);
 
-      // Save the token 
+      // Save the token
       final token = response['idToken'];
       await AuthTokenStorage().saveToken(token);
 
@@ -53,7 +91,7 @@ class SigninPageState extends State<SigninPage> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        backgroundColor: const Color(0xFF121212), // ✅ Set background color here
+        backgroundColor: CustomTheme.fillColor, // Dark background
         body: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -63,79 +101,108 @@ class SigninPageState extends State<SigninPage> {
               child: ListView(
                 shrinkWrap: true,
                 children: [
-                  Image.asset(
-                    'lib/src/assets/images/algo.jpg',
-                    width: 250,
-                    height: 250,
-                  ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
-                    keyboardType: TextInputType.emailAddress,
-                    autocorrect: false,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+                  Column(
+                    mainAxisSize: MainAxisSize.min, // Ensures the column only takes the space it needs
+                    children: [
+                      const Text(
+                        'Herbal App', // Change to your desired text
+                          style: TextStyle(
+                          fontSize: 40,
+                          color: CustomTheme.lettersColor,
+                          fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      const SizedBox(height: 20), // Space between text and logo
+                      SizedBox(
+                        width: 260,
+                        height: 260,
+                        child: ClipOval(
+                          child: FittedBox(
+                            fit: BoxFit.contain, // Ensures the full image is inside the circle
+                            child: Image.asset('lib/src/assets/images/logo_crux.png'),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      filled: true,
-                      fillColor: const Color(0xFF1E1E1E), // ✅ Input field color
-                      labelText: 'Email',
-                      prefixIcon: const Icon(Icons.email, color: Colors.white70),
-                      labelStyle: const TextStyle(color: Colors.white70),
-                    ),
-                    style: const TextStyle(color: Colors.white),
+                  const SizedBox(height: 130.0),
+
+                  // Custom Input for Email
+                  CustomInput(
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
+                    labelText: 'Correo',
+                    hintText: 'Ingrese su email',
+                    icon: Icons.email,
+                    borderColor: Colors.white,
+                    iconColor: CustomTheme.lettersColor,
+                    fillColor: CustomTheme.containerColor,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Email required';
+                        return 'Correo requerido';
                       }
                       if (!isEmail(value.trim())) {
-                        return 'Enter a valid email';
+                        return 'Ingrese correo valido';
                       }
                       return null;
                     },
                     onSaved: (value) => _email = value,
                   ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
+
+                  const SizedBox(height: 100.0),
+
+                  // Custom Input for Password
+                  CustomInput(
+                    controller: _passwordController,
+                    keyboardType: TextInputType.text,
                     obscureText: true,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFF1E1E1E), // ✅ Input field color
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock, color: Colors.white70),
-                      labelStyle: const TextStyle(color: Colors.white70),
-                    ),
-                    style: const TextStyle(color: Colors.white),
+                    labelText: 'Contraseña',
+                    hintText: 'Ingrese su contraseña',
+                    icon: Icons.lock,
+                    borderColor: Colors.white,
+                    iconColor: CustomTheme.lettersColor,
+                    fillColor: CustomTheme.containerColor,
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return 'Password required';
+                        return 'Contraseña requerida';
                       }
                       if (value.trim().length < 6) {
-                        return 'Password must be at least 6 characters long';
+                        return 'Contraseña debe de ser de almenos 6 caracteres';
                       }
                       return null;
                     },
                     onSaved: (value) => _password = value,
                   ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      foregroundColor: Colors.white,
-                      textStyle: const TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 10.0),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+
+                  const SizedBox(height: 60.0),
+
+                  // ✅ CustomButton instead of ElevatedButton
+                  Center(
+                    child: Column(
+                      children: [
+                        CustomButton(
+                          text: 'Ingresar',
+                          onPressed: _submit, // Call the login function
+                          height: 50.0,
+                          width: MediaQuery.of(context).size.width * 0.4, // Half screen width
+                        ),
+                  const SizedBox(height: 30), // Space between button and text
+                  TextButton(
+                      onPressed: () => _showForgotPasswordDialog(context),
+                      child: const Text(
+                        
+                        '¿Olvidó su contraseña?',
+                        style: TextStyle(
+                        color: CustomTheme.lettersColor, // Slightly dimmed for better UI
+                        fontSize: 22,
+                        decoration: TextDecoration.underline, // Underline for clarity
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: const Text('Sign In'),
-                  ),
                 ],
               ),
             ),

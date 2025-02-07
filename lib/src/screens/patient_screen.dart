@@ -1,21 +1,24 @@
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
-
-class PantallaFichaClinica extends StatefulWidget {
-  const PantallaFichaClinica({super.key});
+import 'package:app_herbal_flutter/src/components/custom_input.dart';
+import 'package:app_herbal_flutter/src/components/custom_card.dart';
+class PantientPage extends StatefulWidget {
+  const PantientPage({super.key});
 
   @override
-  State<PantallaFichaClinica> createState() => _PantallaFichaClinicaState();
+  State<PantientPage> createState() => _PatientPageState();
 }
 
-class _PantallaFichaClinicaState extends State<PantallaFichaClinica> {
-  final TextEditingController searchController = TextEditingController();
+class _PatientPageState extends State<PantientPage> {
+   final TextEditingController searchController = TextEditingController();
 
-  // Simulated list of patients
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+
   final List<Map<String, String>> patients = [
     {'name': 'Juan Pérez', 'id': '123', 'diagnosis': 'Caries'},
-    {'name': 'María López', 'id': '124', 'diagnosis': 'Ortodoncia'},
-    {'name': 'Pedro González', 'id': '125', 'diagnosis': 'Limpieza'},
+
   ];
 
   List<Map<String, String>> filteredPatients = [];
@@ -37,159 +40,189 @@ class _PantallaFichaClinicaState extends State<PantallaFichaClinica> {
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomTheme.fillColor, // ✅ Dark background
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Search Bar
-            Container(
-              decoration: BoxDecoration(
-                color: CustomTheme.containerColor, // ✅ Search bar background
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: const Offset(2, 2),
-                  ),
-                ],
-              ),
-              child: TextField(
-                controller: searchController,
-                style: const TextStyle(color: Colors.white), // ✅ Text color
-                decoration: const InputDecoration(
-                  hintText: 'Buscar paciente',
-                  hintStyle: TextStyle(color: Colors.grey), // ✅ Placeholder color
-                  prefixIcon: Icon(Icons.search, color: Colors.blueAccent),
-                  border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                ),
-                onChanged: _filterPatients,
-              ),
-            ),
-            const SizedBox(height: 16),
-            
-            // Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildButton('Buscar', '/PantallaVistaDatos'),
-                _buildButton('Crear', '/PantallaForm'),
-                _buildButton('Editar', null),
-              ],
-            ),
+  void _showPatientDialog() {
+    String timestamp = DateTime.now().toLocal().toString();
 
-            const SizedBox(height: 20),
-            // Title
-            const Text(
-              'Lista de Pacientes',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.white, // ✅ White text for visibility
-              ),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: CustomTheme.containerColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text(
+          'Ingresar Paciente',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CustomInput(
+              controller: nameController,
+              keyboardType: TextInputType.name,
+              labelText: 'Nombre',
+              hintText: 'Ingrese nombre',
+              icon: Icons.person,
+              borderColor: CustomTheme.primaryColor,
+              iconColor: CustomTheme.onprimaryColor,
+              fillColor: Colors.grey[800]!,
             ),
             const SizedBox(height: 10),
-
-            // Patient List
-            Expanded(
-              child: filteredPatients.isEmpty
-                  ? const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.person_search, size: 80, color: CustomTheme.lettersColor),
-                          SizedBox(height: 10),
-                          Text(
-                            'No se encontraron pacientes',
-                            style: TextStyle(fontSize: 16, color: CustomTheme.lettersColor),
-                          ),
-                          SizedBox(height: 10),
-                          Text(
-                            'Intenta realizar una nueva búsqueda.',
-                            style: TextStyle(fontSize: 14, color: CustomTheme.lettersColor),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: filteredPatients.length,
-                      itemBuilder: (context, index) {
-                        final patient = filteredPatients[index];
-                        return Card(
-                          color: CustomTheme.containerColor, // ✅ Dark card background
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          elevation: 5,
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.all(16),
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.white,
-                              child: Text(
-                                patient['name']![0],
-                                style: const TextStyle(color: CustomTheme.primaryColor),
-                              ),
-                            ),
-                            title: Text(
-                              patient['name']!,
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white, // ✅ White text
-                              ),
-                            ),
-                            subtitle: Text(
-                              'Diagnóstico: ${patient['diagnosis']}',
-                              style: const TextStyle(fontSize: 14, color: CustomTheme.lettersColor), // ✅ Grey subtitle
-                            ),
-                            trailing: const Icon(Icons.chevron_right, color: Colors.white),
-                          ),
-                        );
-                      },
-                    ),
+            CustomInput(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              labelText: 'Teléfono',
+              hintText: 'Ingrese teléfono',
+              icon: Icons.phone,
+              borderColor: CustomTheme.primaryColor,
+              iconColor: CustomTheme.onprimaryColor,
+              fillColor: Colors.grey[800]!,
+            ),
+            const SizedBox(height: 10),
+            CustomInput(
+              controller: birthDateController,
+              keyboardType: TextInputType.datetime,
+              labelText: 'Fecha de Nacimiento',
+              hintText: 'YYYY-MM-DD',
+              icon: Icons.calendar_today,
+              borderColor: CustomTheme.primaryColor,
+              iconColor: CustomTheme.onprimaryColor,
+              fillColor: Colors.grey[800]!,
+            ),
+            const SizedBox(height: 10),
+            CustomInput(
+              controller: TextEditingController(text: timestamp),
+              keyboardType: TextInputType.text,
+              labelText: 'Timestamp',
+              hintText: timestamp,
+              icon: Icons.access_time,
+              borderColor: CustomTheme.primaryColor,
+              iconColor: CustomTheme.onprimaryColor,
+              fillColor: Colors.grey[800]!,
             ),
           ],
         ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancelar', style: TextStyle(color: Colors.red)),
+          ),
+          TextButton(
+            onPressed: () {
+              // Save logic
+              print('Paciente agregado: ${nameController.text}');
+              Navigator.pop(context);
+            },
+            child: const Text('Guardar', style: TextStyle(color: Colors.green)),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildButton(String label, String? route) {
-    return InkWell(
-      onTap: route != null
-          ? () => Navigator.of(context).pushReplacementNamed(route)
-          : () => print("$label tapped"),
-      child: Container(
-        width: 120.0,
-        height: 80.0,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1E1E1E), // ✅ Button background
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(2, 4),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: CustomTheme.fillColor,
+      body: Stack(
+        children: [
+          // ✅ Full-screen search bar + list
+          Positioned.fill(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 120.0),
+                  // 🔹 Search Bar with Full Width
+                  Container(
+                    height: 90.0,
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 4,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    child: TextField(
+                      controller: searchController,
+                      style: const TextStyle(color: Colors.white),
+                      decoration: const InputDecoration(
+                        hintText: 'Buscar paciente',
+                        hintStyle: TextStyle(color: Colors.grey),
+                        prefixIcon: Icon(Icons.search, color: Colors.blueAccent),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 12,
+                          horizontal: 16,
+                        ),
+                      ),
+                      onChanged: _filterPatients,
+                    ),
+                  ),
+
+
+                  
+                  const SizedBox(height: 50),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: InkWell(
+                    onTap: () {
+                      // Your onTap function logic here
+                    print("Card tapped");
+                        },
+                    child: Container(
+                    height: MediaQuery.of(context).size.height * 0.2, // 30% of the screen height
+                    width: MediaQuery.of(context).size.width * 1, // Adjust width as needed
+                    child: CustomCard(
+                      child: ListTile(
+                      title: Text(
+                        filteredPatients.isNotEmpty ? filteredPatients[0]['name']! : 'No Patient Found',
+                        style: const TextStyle(color: Colors.white),
+                        ),
+                      subtitle: Text(
+                        filteredPatients.isNotEmpty ? 'Diagnóstico: ${filteredPatients[0]['diagnosis']}' : '',
+                        style: const TextStyle(color: Colors.grey),
+                          ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ],
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          label,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
           ),
-        ),
+
+          // ✅ Positioned 170x170 InkWell Container (Centered Left)
+          Positioned(
+            top: MediaQuery.of(context).size.height / 2 - 85, // Centered vertically
+            left: 10, // 10px from the left
+            child: InkWell(
+              onTap: _showPatientDialog,
+              child: Container(
+                width: 170,
+                height: 170,
+                decoration: BoxDecoration(
+                  image: const DecorationImage(
+                    image: AssetImage('lib/src/assets/images/ingreso_paciente.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 5,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

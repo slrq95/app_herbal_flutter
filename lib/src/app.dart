@@ -9,6 +9,7 @@ class Appstate extends StatelessWidget{
   const Appstate({super.key});
   @override
   Widget build(BuildContext context){
+    
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<Bottomnavindexprovider>(
@@ -40,6 +41,7 @@ class MedicalApp extends StatelessWidget{
       ),
       initialRoute: '/',
       onGenerateRoute: MedicalRoute.onGenerateRoute,
+       debugShowCheckedModeBanner: false,
     );
   }
 }

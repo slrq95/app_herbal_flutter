@@ -13,13 +13,13 @@ class CustomTheme{
 
   );
 
-  static const Color primaryColor=Color(0xFF125542);
+  static const Color primaryColor=Color.fromARGB(255, 7, 138, 60);
   static const Color secondaryColor= Color(0xFFCC2D37);
   static const Color onprimaryColor=Color(0XFF28BB91);
   static const Color tertiaryColor=Color(0xFFBB8028);
   static const Color buttonColor=Color(0xFF757575);
   static const Color fillColor=Color(0xFF121212);
   static const Color containerColor=Color(0xFF1E1E1E);
-  static const Color lettersColor= Color.fromARGB(255, 197, 197, 197);
+  static const Color lettersColor= Colors.white70;
   static const List<Color> gradientes=[Color(0xFF2196F3), Color.fromARGB(255, 124, 71, 188)];
 }
