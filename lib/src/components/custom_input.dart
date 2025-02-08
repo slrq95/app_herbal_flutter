@@ -19,6 +19,7 @@ class CustomInput extends StatelessWidget {
   final  TextStyle? hintStyle;
   final  TextStyle? labelStyle;
   final TextStyle? inputStyle;
+  final bool? readOnly;
 
   const CustomInput({
     super.key,
@@ -40,6 +41,7 @@ class CustomInput extends StatelessWidget {
     this.labelStyle,
     this.hintStyle,
     this.inputStyle,
+    this.readOnly,
   });
 
   @override

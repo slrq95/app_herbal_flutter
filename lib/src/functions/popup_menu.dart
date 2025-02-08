@@ -34,7 +34,7 @@ void showPopupMenu(BuildContext context) {
               text: "Ficha Clinica",
               onTap: () {
                 print("Ficha clinica tapped");
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed('/ClinicalHistoryPage');
               },
             ),
             _buildMenuItem(
@@ -51,7 +51,7 @@ void showPopupMenu(BuildContext context) {
               text: "Historial de pago",
               onTap: () {
                 print("Historial de pago tapped");
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed('/PaymentHistoryPage');
               },
             ),
           ],

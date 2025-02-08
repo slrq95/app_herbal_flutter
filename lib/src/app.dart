@@ -3,7 +3,7 @@ import 'package:app_herbal_flutter/src/tools/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-
+import 'package:app_herbal_flutter/src/api/payment_provider.dart';
 
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
@@ -15,6 +15,7 @@ class Appstate extends StatelessWidget{
         ChangeNotifierProvider<Bottomnavindexprovider>(
           create:(_) =>Bottomnavindexprovider(),
         ),
+        ChangeNotifierProvider(create: (_) => PaymentProvider()),
         //ChangeNotifierProvider(create: (_) => VistaDatosProvider()),
 
 
