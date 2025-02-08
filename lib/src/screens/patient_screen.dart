@@ -2,6 +2,9 @@ import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_card.dart';
+import 'package:flutter_context_menu/flutter_context_menu.dart';
+import 'package:app_herbal_flutter/src/functions/show_patient_dialog.dart';
+import 'package:app_herbal_flutter/src/functions/popup_menu.dart';
 class PantientPage extends StatefulWidget {
   const PantientPage({super.key});
 
@@ -23,6 +26,7 @@ class _PatientPageState extends State<PantientPage> {
 
   List<Map<String, String>> filteredPatients = [];
 
+
   @override
   void initState() {
     super.initState();
@@ -40,83 +44,7 @@ class _PatientPageState extends State<PantientPage> {
     });
   }
 
-  void _showPatientDialog() {
-    String timestamp = DateTime.now().toLocal().toString();
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: CustomTheme.containerColor,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          'Ingresar Paciente',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomInput(
-              controller: nameController,
-              keyboardType: TextInputType.name,
-              labelText: 'Nombre',
-              hintText: 'Ingrese nombre',
-              icon: Icons.person,
-              borderColor: CustomTheme.primaryColor,
-              iconColor: CustomTheme.onprimaryColor,
-              fillColor: Colors.grey[800]!,
-            ),
-            const SizedBox(height: 10),
-            CustomInput(
-              controller: phoneController,
-              keyboardType: TextInputType.phone,
-              labelText: 'Teléfono',
-              hintText: 'Ingrese teléfono',
-              icon: Icons.phone,
-              borderColor: CustomTheme.primaryColor,
-              iconColor: CustomTheme.onprimaryColor,
-              fillColor: Colors.grey[800]!,
-            ),
-            const SizedBox(height: 10),
-            CustomInput(
-              controller: birthDateController,
-              keyboardType: TextInputType.datetime,
-              labelText: 'Fecha de Nacimiento',
-              hintText: 'YYYY-MM-DD',
-              icon: Icons.calendar_today,
-              borderColor: CustomTheme.primaryColor,
-              iconColor: CustomTheme.onprimaryColor,
-              fillColor: Colors.grey[800]!,
-            ),
-            const SizedBox(height: 10),
-            CustomInput(
-              controller: TextEditingController(text: timestamp),
-              keyboardType: TextInputType.text,
-              labelText: 'Timestamp',
-              hintText: timestamp,
-              icon: Icons.access_time,
-              borderColor: CustomTheme.primaryColor,
-              iconColor: CustomTheme.onprimaryColor,
-              fillColor: Colors.grey[800]!,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.red)),
-          ),
-          TextButton(
-            onPressed: () {
-              // Save logic
-              print('Paciente agregado: ${nameController.text}');
-              Navigator.pop(context);
-            },
-            child: const Text('Guardar', style: TextStyle(color: Colors.green)),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -170,14 +98,14 @@ class _PatientPageState extends State<PantientPage> {
                     padding: const EdgeInsets.only(bottom: 12.0),
                     child: InkWell(
                     onTap: () {
-                      // Your onTap function logic here
+                      showPopupMenu(context);
                     print("Card tapped");
                         },
                     child: Container(
                     height: MediaQuery.of(context).size.height * 0.2, // 30% of the screen height
                     width: MediaQuery.of(context).size.width * 1, // Adjust width as needed
                     child: CustomCard(
-                      child: ListTile(
+                      child: ListTile( 
                       title: Text(
                         filteredPatients.isNotEmpty ? filteredPatients[0]['name']! : 'No Patient Found',
                         style: const TextStyle(color: Colors.white),
@@ -201,7 +129,7 @@ class _PatientPageState extends State<PantientPage> {
             top: MediaQuery.of(context).size.height / 2 - 85, // Centered vertically
             left: 10, // 10px from the left
             child: InkWell(
-              onTap: _showPatientDialog,
+              onTap:(){ showPatientDialog(context);},
               child: Container(
                 width: 170,
                 height: 170,

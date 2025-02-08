@@ -11,11 +11,14 @@ class CustomInput extends StatelessWidget {
   final Color borderColor;
   final Color iconColor;
   final Color fillColor;
-  final double width;  
-  final double height; 
-  final double fontSize; 
+  final double width;
+  final double height;
+  final double fontSize;
   final FormFieldValidator<String>? validator;
   final FormFieldSetter<String>? onSaved;
+  final  TextStyle? hintStyle;
+  final  TextStyle? labelStyle;
+  final TextStyle? inputStyle;
 
   const CustomInput({
     super.key,
@@ -32,7 +35,11 @@ class CustomInput extends StatelessWidget {
     this.height = 90.0, 
     this.fontSize = 24.0, 
     this.validator,
+    
     this.onSaved,
+    this.labelStyle,
+    this.hintStyle,
+    this.inputStyle,
   });
 
   @override
@@ -55,7 +62,7 @@ class CustomInput extends StatelessWidget {
           prefixIcon: Icon(icon, color: iconColor),
           labelStyle: TextStyle(color: CustomTheme.lettersColor, fontSize: fontSize), // Font size applied ✅
         ),
-        style: TextStyle(color: CustomTheme.lettersColor, fontSize: fontSize), // Font size applied ✅
+        style: TextStyle(color: Colors.white, fontSize: fontSize), // Font size applied ✅
         validator: validator,
         onSaved: onSaved,
       ),

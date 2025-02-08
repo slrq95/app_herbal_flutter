@@ -4,6 +4,7 @@ import 'package:app_herbal_flutter/src/app.dart';
 
 
 Future<void> main() async{
+ // Disables the debug banner  
 WidgetsFlutterBinding.ensureInitialized();
 await Firebase.initializeApp();
 runApp(const Appstate());

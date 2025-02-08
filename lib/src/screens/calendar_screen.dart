@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:intl/intl.dart';
-import 'package:app_herbal_flutter/src/components/custom_calendar.dart'; // Import the custom calendar
+import 'package:table_calendar/table_calendar.dart';// Import the custom calendar
 import 'package:app_herbal_flutter/src/theme/default.dart';
 
 class PantallaCalendario extends StatefulWidget {
@@ -20,7 +18,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212), // Set the background color to #121212
+      backgroundColor: CustomTheme.fillColor, // Set the background color to #121212
 
       body: Stack(
         children: [
@@ -42,6 +40,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
 
               // Table Calendar (Month View)
               TableCalendar(
+                
                 firstDay: DateTime.utc(2000, 1, 1),
                 lastDay: DateTime.utc(2100, 12, 31),
                 focusedDay: _focusedDay,

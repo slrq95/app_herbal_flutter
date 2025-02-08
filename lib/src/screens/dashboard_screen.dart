@@ -43,15 +43,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CustomTheme.fillColor,
-      appBar: AppBar(
-        title: const Text(
-          'Dashboard',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-        elevation: 5,
-      ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -151,9 +143,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           height: 150,
           child: BarChart(
             BarChartData(
-              gridData: FlGridData(show: false),
+              gridData: const FlGridData(show: false),
               borderData: FlBorderData(show: false),
-              titlesData: FlTitlesData(show: false),
+              titlesData: const FlTitlesData(show: false),
               barGroups: [
                 BarChartGroupData(
                   x: 1,
