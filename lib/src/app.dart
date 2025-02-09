@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
+import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
 
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
@@ -16,11 +17,8 @@ class Appstate extends StatelessWidget{
           create:(_) =>Bottomnavindexprovider(),
         ),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
-        //ChangeNotifierProvider(create: (_) => VistaDatosProvider()),
-
-
-
-        
+        ChangeNotifierProvider(create: (_) => DioAuthProvider()),
+        //ChangeNotifierProvider(create: (_) => VistaDatosProvider()), 
       ],
       child: const MedicalApp(),
       );
@@ -32,17 +30,18 @@ class MedicalApp extends StatelessWidget{
   
   @override
   Widget build(BuildContext context) {
-        SystemChrome.setPreferredOrientations([
+      SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
     return MaterialApp(
+      
       title: 'Dentistas App',
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
       initialRoute: '/',
       onGenerateRoute: MedicalRoute.onGenerateRoute,
-       debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

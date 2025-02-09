@@ -1,8 +1,6 @@
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
-import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_card.dart';
-import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:app_herbal_flutter/src/functions/show_patient_dialog.dart';
 import 'package:app_herbal_flutter/src/functions/popup_menu.dart';
 class PantientPage extends StatefulWidget {
