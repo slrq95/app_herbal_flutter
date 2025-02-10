@@ -43,7 +43,7 @@ void showPopupMenu(BuildContext context) {
 
               onTap: () {
                 print("Plan de tratamiento tapped");
-                Navigator.pop(context);
+                Navigator.of(context).pushReplacementNamed('/TreatmentPlanPage');
               },
             ),
             _buildMenuItem(

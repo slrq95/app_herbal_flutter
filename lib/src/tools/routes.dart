@@ -5,6 +5,7 @@ import 'package:app_herbal_flutter/src/screens/options_screen/options_screen.dar
 import 'package:app_herbal_flutter/src/screens/patient_options/appointment_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_screen.dart';
+import 'package:app_herbal_flutter/src/screens/patient_options/treatement_plan_screen.dart';
 import 'package:app_herbal_flutter/src/screens/splash_page.dart';
 import 'package:app_herbal_flutter/src/screens/options_screen/patient_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,10 @@ switch(settings.name){
     return MaterialPageRoute(builder: (_) =>  ClinicalHistoryPage());
 
   case'/PaymentHistoryPage':
-    return MaterialPageRoute(builder: (_) =>  PaymentHistory());
+    return MaterialPageRoute(builder: (_) =>  const PaymentHistory());
+  
+  case'/TreatmentPlanPage':
+    return MaterialPageRoute(builder: (_) =>  const TreatmentPlanScreen());
 
   default:
     _errorRoute();

@@ -60,7 +60,7 @@ Widget build(BuildContext context) {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 130.0),
+                  const SizedBox(height: 50.0),
 
                   // Email Input
                   CustomInput(
@@ -83,7 +83,7 @@ Widget build(BuildContext context) {
                     },
                   ),
 
-                  const SizedBox(height: 100.0),
+                  const SizedBox(height: 50.0),
 
                   // Password Input
                   CustomInput(
@@ -107,7 +107,7 @@ Widget build(BuildContext context) {
                     },
                   ),
 
-                  const SizedBox(height: 60.0),
+                  const SizedBox(height: 20.0),
 
                   // Login Button with Consumer
                   Center(
@@ -125,7 +125,7 @@ Widget build(BuildContext context) {
                                   );
                           },
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 10),
                         TextButton(
                           onPressed: () => showForgotPasswordDialog(context),
                           child: const Text(

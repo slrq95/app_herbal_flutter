@@ -1,5 +1,5 @@
-import 'package:app_herbal_flutter/src/functions/build%20dashboard%20graphs/appointments_graph.dart';
-import 'package:app_herbal_flutter/src/functions/build%20dashboard%20graphs/text_containers.dart';
+import 'package:app_herbal_flutter/src/functions/build_dashboard_graphs/appointments_graph.dart';
+import 'package:app_herbal_flutter/src/functions/build_dashboard_graphs/text_containers.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/components/custom_container.dart';

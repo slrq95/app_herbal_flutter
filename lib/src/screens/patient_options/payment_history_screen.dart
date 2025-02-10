@@ -17,6 +17,7 @@ class PaymentHistory extends StatefulWidget {
 
 class PaymentHistoryState extends State<PaymentHistory> {
   final TextEditingController amountController = TextEditingController();
+  final TextEditingController nameController = TextEditingController(text: 'nombre del paciente');
 @override
   void initState() {
     super.initState();
@@ -55,12 +56,40 @@ class PaymentHistoryState extends State<PaymentHistory> {
                           width: 100,
                           height: 40,
                           color: CustomTheme.fillColor,
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Navigator.of(context).pushReplacementNamed('/home'),
                         ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 20),
+                  // Non-editable Patient Name input field
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            nameController.text.isNotEmpty 
+                                ? nameController.text 
+                                : 'Cargando...',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
                   // Amount Input Field
                   CustomInput(
