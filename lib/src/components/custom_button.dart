@@ -36,7 +36,7 @@ class CustomButton extends StatelessWidget {
             text,
             style: style ?? const TextStyle(
               color: CustomTheme.lettersColor,
-              fontSize: 24.0,
+              fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
             textAlign: TextAlign.center, // Centers text horizontally

@@ -1,7 +1,7 @@
-import 'package:app_herbal_flutter/src/screens/dashboard_screen.dart';
+import 'package:app_herbal_flutter/src/screens/options_screen/dashboard_screen.dart';
 import 'package:app_herbal_flutter/src/screens/login_screen.dart';
 
-import 'package:app_herbal_flutter/src/screens/options_screen.dart';
+import 'package:app_herbal_flutter/src/screens/options_screen/options_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/appointment_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_screen.dart';

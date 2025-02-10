@@ -6,7 +6,7 @@ import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
 import 'package:app_herbal_flutter/src/functions/forgot_password.dart';
-import 'package:app_herbal_flutter/src/functions/submit_login.dart'; // ✅ Import submit function
+import 'package:app_herbal_flutter/src/functions/submit_login.dart'; 
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
@@ -20,10 +20,11 @@ class SigninPageState extends State<SigninPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
+ @override
+Widget build(BuildContext context) {
+  return GestureDetector(
+    onTap: () => FocusScope.of(context).unfocus(),
+    child: SafeArea( // ✅ Wrap Scaffold with SafeArea
       child: Scaffold(
         backgroundColor: CustomTheme.fillColor,
         body: Center(
@@ -118,7 +119,7 @@ class SigninPageState extends State<SigninPage> {
                                 ? const CircularProgressIndicator()
                                 : CustomButton(
                                     text: 'Ingresar',
-                                    onPressed: () => submit(context, _emailController, _passwordController), // ✅ Call submit function
+                                    onPressed: () => submit(context, _emailController, _passwordController),
                                     height: 50.0,
                                     width: MediaQuery.of(context).size.width * 0.4,
                                   );
@@ -145,6 +146,7 @@ class SigninPageState extends State<SigninPage> {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

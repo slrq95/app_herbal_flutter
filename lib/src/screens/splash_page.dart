@@ -17,7 +17,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _navigate() async {
-    // Delay to show splash effect in order to not use BuildContext inside an async function after an await or delayed exec.
+    // Delay to show splash effect in order to not use BuildContext inside an async function after an await or delayed execution.
     await Future.delayed(const Duration(seconds: 1));
 
     if (!mounted) return; // Ensure widget is still in the tree
@@ -32,9 +32,11 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: CircularProgressIndicator(),
+    return const SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

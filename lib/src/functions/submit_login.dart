@@ -15,7 +15,7 @@ Future<void> submit(BuildContext context, TextEditingController emailController,
 
   final success = await authProvider.signIn(email, password);
 
-  if (!context.mounted) return; // check if widget is mounted in order to cause an error on async/await function
+  if (!context.mounted) return; // check if widget is mounted in order to avoiding an error on async/await function
 
   if (success) {
     Navigator.pushReplacement(

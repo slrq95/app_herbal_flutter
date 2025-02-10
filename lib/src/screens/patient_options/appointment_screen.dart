@@ -124,16 +124,18 @@ void _cancelAppointment() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomTheme.fillColor,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+      return Scaffold(
+        backgroundColor: CustomTheme.fillColor,
+        body: SafeArea( // Wrap only the body
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+            // Your UI 
             // Custom Header Instead of AppBar
             Container(
-              height: 90,
+              height: 60,
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
               decoration: BoxDecoration(
                 color: CustomTheme.containerColor,
@@ -149,9 +151,9 @@ void _cancelAppointment() {
                   CustomButton(
                     text: 'Regresar',
                     color: CustomTheme.fillColor,
-                    width: 120,
+                    width: 90,
                     height: 40,
-                    style: const TextStyle(fontSize: 22, color: CustomTheme.lettersColor),
+                    style: const TextStyle(fontSize: 20, color: CustomTheme.lettersColor),
                     onPressed: () {
                       Navigator.of(context).pushReplacementNamed('/home');
                     },
@@ -159,11 +161,11 @@ void _cancelAppointment() {
                 ],
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
                   // Non-editable Patient Name input field
                   Container(
                     width: double.infinity,
-                    height: 70.0,
+                    height: 60.0,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                     color: const Color(0xFF1E1E1E), // Background color
@@ -180,7 +182,7 @@ void _cancelAppointment() {
                         : 'Cargando...', // Placeholder while fetching data
                         style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                           ),
                         overflow: TextOverflow.ellipsis, // Handles long names
@@ -189,7 +191,7 @@ void _cancelAppointment() {
                     ],
                   ),
                 ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
             // Fecha Input (Date Picker)
             GestureDetector(
               onTap: () => _selectDate(context, dateController),
@@ -206,7 +208,7 @@ void _cancelAppointment() {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             // Hora Input (Time Picker)
             GestureDetector(
               onTap: () => _selectTime(context, timeController),
@@ -223,7 +225,7 @@ void _cancelAppointment() {
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
   
             DropdownButtonFormField<String>(
               value: priority,
@@ -262,7 +264,7 @@ void _cancelAppointment() {
               }).toList(),
               onChanged: (newValue) => setState(() => type = newValue!),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 20),
                             CustomButton(
                   height: 80,
                   width: 200,
@@ -272,7 +274,7 @@ void _cancelAppointment() {
                     // Implement API call to save data
                   },
                 ),
-              const SizedBox(height: 180),
+              const SizedBox(height: 50),
             // Reprogramar Cita Input
             GestureDetector(
               onTap: () => _selectDate(context, reprogramDateController),
@@ -306,14 +308,14 @@ void _cancelAppointment() {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
 
                 CustomButton(
                 height: 80,
-                width: 200,
+                width: 100,
                 text: 'Cancelar Cita',
                 color: CustomTheme.secondaryColor,
                 onPressed: () {
@@ -323,7 +325,7 @@ void _cancelAppointment() {
                 
             CustomButton(
               height: 80,
-              width: 200,
+              width: 100,
               text: 'Reprogramar Cita',
               color: CustomTheme.primaryColor,
               onPressed: _reprogramDateTime, // Call the reprogramming function
@@ -334,6 +336,6 @@ void _cancelAppointment() {
           ],
         ),
       ),
-    );
+    ));
   }
 }

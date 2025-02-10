@@ -17,8 +17,7 @@ class PaymentHistory extends StatefulWidget {
 
 class _PaymentHistoryState extends State<PaymentHistory> {
   final TextEditingController amountController = TextEditingController();
-
-  @override
+@override
   void initState() {
     super.initState();
     Provider.of<PaymentProvider>(context, listen: false).initialize();
@@ -26,67 +25,69 @@ class _PaymentHistoryState extends State<PaymentHistory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomTheme.fillColor,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Consumer<PaymentProvider>(
-          builder: (context, paymentProvider, child) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Top container with title and back button
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
-                  decoration: BoxDecoration(
-                    color: CustomTheme.containerColor,
-                    borderRadius: BorderRadius.circular(10.0),
+    return SafeArea(  // Wrap the entire Scaffold with SafeArea
+      child: Scaffold(
+        backgroundColor: CustomTheme.fillColor,
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer<PaymentProvider>(
+            builder: (context, paymentProvider, child) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Top container with title and back button
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Historial de Abonos',
+                          style: TextStyle(color: CustomTheme.lettersColor, fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        CustomButton(
+                          
+                          text: 'Regresar',
+                          width: 100,
+                          height: 40,
+                          color: CustomTheme.fillColor,
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  const SizedBox(height: 20),
+
+                  // Amount Input Field
+                  CustomInput(
+        
+                    fillColor: CustomTheme.containerColor,
+                    iconColor: CustomTheme.buttonColor,
+                    borderColor: CustomTheme.buttonColor,
+                    controller: amountController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    labelText: 'Monto a Abonar',
+                    hintText: 'Ingrese el monto',
+                    icon: Icons.money,
+                  ),
+                  const SizedBox(height: 20),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const Text(
-                        'Historial de Abonos',
-                        style: TextStyle(color: CustomTheme.lettersColor, fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      CustomButton(
-                        text: 'Regresar',
-                        width: 120,
-                        height: 40,
-                        color: CustomTheme.fillColor,
-                        onPressed: () => Navigator.pop(context),
-                      ),
+                      CustomButton(text: 'Confirmar Abono', width: 130, height: 70, color: CustomTheme.primaryColor ,onPressed: () => onConfirmButtonPressed(context,amountController)),
+                      CustomButton(text: 'Cancelar Abono', width: 130, height: 70, color: CustomTheme.secondaryColor, onPressed: () => showCancelConfirmationDialog(context)),
                     ],
                   ),
-                ),
-                const SizedBox(height: 20),
+                  const SizedBox(height: 30),
 
-                // Amount Input Field
-                CustomInput(
-                  fillColor: CustomTheme.containerColor,
-                  iconColor: CustomTheme.buttonColor,
-                  borderColor: CustomTheme.buttonColor,
-                  controller: amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  labelText: 'Monto a Abonar',
-                  hintText: 'Ingrese el monto',
-                  icon: Icons.money,
-                ),
-                const SizedBox(height: 20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    CustomButton(text: 'Confirmar Abono', width: 200, height: 70, color: CustomTheme.primaryColor ,onPressed: () => onConfirmButtonPressed(context,amountController)),
-                    CustomButton(text: 'Cancelar Abono', width: 200, height: 70, color: CustomTheme.secondaryColor, onPressed: () => showCancelConfirmationDialog(context)),
-                  ],
-                ),
-                const SizedBox(height: 30),
-
-          
-                      // Payment Data Display Containers
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  // Payment Data Display Containers
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CustomContainer(
                         width: MediaQuery.of(context).size.width * 0.45,
@@ -95,8 +96,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                           'Abonos Realizados',
                           style: TextStyle(color: CustomTheme.primaryColor, fontSize: 28),
                           textAlign: TextAlign.center,
-                            ),
-                          ),
+                        ),
+                      ),
                       CustomContainer(
                         width: MediaQuery.of(context).size.width * 0.45,
                         height: 100,
@@ -104,42 +105,44 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                           paymentProvider.abonosRealizados.toStringAsFixed(2), // Access data from provider
                           style: const TextStyle(color: CustomTheme.primaryColor, fontSize: 28, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
-                            ),
-                          ),
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CustomContainer(
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          height: 100,
-                          child: const Text(
-                            'Abonos Pendientes',
-                            style: TextStyle(color: Colors.redAccent, fontSize: 28),
-                            textAlign: TextAlign.center,
-                            ),
+                    children: [
+                      CustomContainer(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        height: 100,
+                        child: const Text(
+                          'Abonos Pendientes',
+                          style: TextStyle(color: Colors.redAccent, fontSize: 28),
+                          textAlign: TextAlign.center,
                         ),
-                        CustomContainer(
-                          width: MediaQuery.of(context).size.width * 0.45,
-                          height: 100,
-                          child: Text(
-                            paymentProvider.abonosPendientes.toStringAsFixed(2), // Access data from provider
-                            style: const TextStyle(color: Colors.redAccent, fontSize: 28, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                              ),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
+                      ),
+                      CustomContainer(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        height: 100,
+                        child: Text(
+                          paymentProvider.abonosPendientes.toStringAsFixed(2), // Access data from provider
+                          style: const TextStyle(color: Colors.redAccent, fontSize: 28, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
 
-                    CustomButton(text: 'Guardar Datos', width: 200, height: 70, onPressed: () {}),
-              ],
-            );
-          },
+                  CustomButton(text: 'Guardar Datos', width: 200, height: 70, onPressed: () {}),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
-  }}
+  }
+}
