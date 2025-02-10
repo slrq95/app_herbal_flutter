@@ -5,17 +5,17 @@ import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_container.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
-import 'package:app_herbal_flutter/src/functions/cancel_payment.dart';
-import 'package:app_herbal_flutter/src/functions/confirm_payment.dart';
+import 'package:app_herbal_flutter/src/functions/payment_functions/cancel_payment.dart';
+import 'package:app_herbal_flutter/src/functions/payment_functions/confirm_payment.dart';
 
 class PaymentHistory extends StatefulWidget {
   const PaymentHistory({super.key});
 
   @override
-  _PaymentHistoryState createState() => _PaymentHistoryState();
+  PaymentHistoryState createState() => PaymentHistoryState();
 }
 
-class _PaymentHistoryState extends State<PaymentHistory> {
+class PaymentHistoryState extends State<PaymentHistory> {
   final TextEditingController amountController = TextEditingController();
 @override
   void initState() {
@@ -46,7 +46,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
-                          'Historial de Abonos',
+                          'Historial de Pagos',
                           style: TextStyle(color: CustomTheme.lettersColor, fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         CustomButton(
@@ -70,7 +70,7 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                     borderColor: CustomTheme.buttonColor,
                     controller: amountController,
                     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                    labelText: 'Monto a Abonar',
+                    labelText: 'Monto a pagar',
                     hintText: 'Ingrese el monto',
                     icon: Icons.money,
                   ),
@@ -79,8 +79,8 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CustomButton(text: 'Confirmar Abono', width: 130, height: 70, color: CustomTheme.primaryColor ,onPressed: () => onConfirmButtonPressed(context,amountController)),
-                      CustomButton(text: 'Cancelar Abono', width: 130, height: 70, color: CustomTheme.secondaryColor, onPressed: () => showCancelConfirmationDialog(context)),
+                      CustomButton(text: 'Confirmar Pago', width: 130, height: 70, color: CustomTheme.primaryColor ,onPressed: () => onConfirmButtonPressed(context,amountController)),
+                      CustomButton(text: 'Cancelar Pago', width: 130, height: 70, color: CustomTheme.secondaryColor, onPressed: () => showCancelConfirmationDialog(context)),
                     ],
                   ),
                   const SizedBox(height: 30),
@@ -90,20 +90,21 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CustomContainer(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        height: 100,
+                        color: CustomTheme.fillColor,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: 90,
                         child: const Text(
-                          'Abonos Realizados',
-                          style: TextStyle(color: CustomTheme.primaryColor, fontSize: 28),
+                          'Pagos Realizados',
+                          style: TextStyle(color: CustomTheme.primaryColor, fontSize: 22),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       CustomContainer(
                         width: MediaQuery.of(context).size.width * 0.45,
-                        height: 100,
+                        height: 90,
                         child: Text(
                           paymentProvider.abonosRealizados.toStringAsFixed(2), // Access data from provider
-                          style: const TextStyle(color: CustomTheme.primaryColor, fontSize: 28, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: CustomTheme.primaryColor, fontSize: 22, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),
@@ -115,20 +116,21 @@ class _PaymentHistoryState extends State<PaymentHistory> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       CustomContainer(
-                        width: MediaQuery.of(context).size.width * 0.45,
-                        height: 100,
+                        color: CustomTheme.fillColor,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                        height: 90,
                         child: const Text(
-                          'Abonos Pendientes',
-                          style: TextStyle(color: Colors.redAccent, fontSize: 28),
+                          'Pagos Pendientes',
+                          style: TextStyle(color: Colors.redAccent, fontSize: 22),
                           textAlign: TextAlign.center,
                         ),
                       ),
                       CustomContainer(
                         width: MediaQuery.of(context).size.width * 0.45,
-                        height: 100,
+                        height: 90,
                         child: Text(
                           paymentProvider.abonosPendientes.toStringAsFixed(2), // Access data from provider
-                          style: const TextStyle(color: Colors.redAccent, fontSize: 28, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.redAccent, fontSize: 22, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ),

@@ -6,7 +6,7 @@ import 'package:app_herbal_flutter/src/screens/patient_options/appointment_scree
 import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_screen.dart';
 import 'package:app_herbal_flutter/src/screens/splash_page.dart';
-import 'package:app_herbal_flutter/src/screens/patient_screen.dart';
+import 'package:app_herbal_flutter/src/screens/options_screen/patient_screen.dart';
 import 'package:flutter/material.dart';
 
 

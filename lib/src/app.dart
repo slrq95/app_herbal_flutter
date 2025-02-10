@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
 import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
-
+import 'package:app_herbal_flutter/src/api/appointement_services/appointment_provider.dart';
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
   @override
@@ -22,6 +22,8 @@ class Appstate extends StatelessWidget{
         ChangeNotifierProvider(create: (_) => DioAuthProvider()),
         ChangeNotifierProvider(create: (_) => PatientProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+        
         //ChangeNotifierProvider(create: (_) => VistaDatosProvider()), 
       ],
       child: const MedicalApp(),
@@ -39,7 +41,7 @@ class MedicalApp extends StatelessWidget{
     ]);
     return MaterialApp(
       
-      title: 'Dentistas App',
+      title: 'Herbal App',
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),

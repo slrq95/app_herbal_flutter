@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DashboardProvider with ChangeNotifier {
   double _totalAttended = 45;
-  double _totalNotAttended = 12;// fetched data from my backend API
+  double _totalNotAttended = 12;
   double _totalPayments = 10000;
   double _totalRemaining = 3000;
 

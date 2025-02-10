@@ -1,6 +1,6 @@
 import 'package:app_herbal_flutter/src/screens/options_screen/calendar_screen.dart';
 import 'package:app_herbal_flutter/src/screens/options_screen/dashboard_screen.dart';
-import 'package:app_herbal_flutter/src/screens/patient_screen.dart';
+import 'package:app_herbal_flutter/src/screens/options_screen/patient_screen.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/api/bottom_nav_index_provider.dart';
@@ -37,7 +37,7 @@ Future<void> signOut(BuildContext context) async {
             Container(
               margin: const EdgeInsets.only(top: 10.0),
               padding: const EdgeInsets.only(top: 20.0),
-              height: 60,
+              height: 80,
               color: CustomTheme.containerColor, 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -49,8 +49,8 @@ Future<void> signOut(BuildContext context) async {
                       tag: 'signOutIcon',
                       child: Image.asset(
                         'lib/src/assets/images/sign_out.png', 
-                        width: 90.0,
-                        height: 90.0,
+                        width: 120.0,
+                        height: 120.0,
                       ),
                     ),
                     iconSize: 60.0,

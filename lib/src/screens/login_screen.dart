@@ -5,8 +5,8 @@ import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
-import 'package:app_herbal_flutter/src/functions/forgot_password.dart';
-import 'package:app_herbal_flutter/src/functions/submit_login.dart'; 
+import 'package:app_herbal_flutter/src/functions/login_functions/forgot_password.dart';
+import 'package:app_herbal_flutter/src/functions/login_functions/submit_login.dart'; 
 
 class SigninPage extends StatefulWidget {
   const SigninPage({super.key});
