@@ -1,8 +1,8 @@
 class Patient {
   final String id;
-  final String name;
-  final String phone;
-  final String birthDate;
+   String name;
+   String phone;
+   String birthDate;
 
   Patient({
     required this.id,

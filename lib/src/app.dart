@@ -26,6 +26,7 @@ class Appstate extends StatelessWidget{
         ChangeNotifierProvider(create: (_) => AppointmentProvider()),
         ChangeNotifierProvider(create: (_) => TreatmentPlanProvider()),
         ChangeNotifierProvider(create: (_) => SelectedPatientProvider()),
+        ChangeNotifierProvider(create: (context) => PatientUpdateProvider()),
         
         //ChangeNotifierProvider(create: (_) => VistaDatosProvider()),
       ],

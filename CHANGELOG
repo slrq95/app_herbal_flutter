@@ -1,4 +1,9 @@
 11/02/2025
-Making Improvements on patient_screen.dart, popup_menu.dart, patient_provider in order to post
-in order to post and fetch data to my Backend API(express,nodejs,posgresql) to mi patient table
+Making Improvements on patient_screen.dart, popup_menu.dart, patient_provider,
+in order to post and fetch data to my Backend API(express,nodejs,posgresql) to my patient table
 in my app_herbal database 
+11/02/2025(5:22 pm)
+making improvements on patient_screen.dart, adding handling state for uddate patient_provider.dart,
+ making function to update patient data, making dio_update.dart, still remaining UI quickly 
+ UI refreshing when updating patient data, thinking and research 
+ about Normal forms 1,2 and 3 and the way to implement in my sql database structure.

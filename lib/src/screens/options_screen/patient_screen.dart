@@ -1,3 +1,4 @@
+import 'package:app_herbal_flutter/src/functions/patient_screen_functions/update_patient_dialog.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/components/custom_card.dart';
@@ -5,6 +6,7 @@ import 'package:app_herbal_flutter/src/functions/show_patient_dialog.dart';
 import 'package:app_herbal_flutter/src/functions/popup_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+import 'package:app_herbal_flutter/src/models/patient_model.dart';
 
 class PantientPage extends StatefulWidget {
   const PantientPage({super.key});
@@ -17,11 +19,12 @@ class _PatientPageState extends State<PantientPage> {
   @override
   Widget build(BuildContext context) {
     final patientProvider = Provider.of<PatientProvider>(context, listen: false);
+    final updateProvider = Provider.of<PatientUpdateProvider>(context, listen: false);
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomTheme.fillColor,
-        body: SingleChildScrollView(  // Single scrollable container
+        body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -82,7 +85,6 @@ class _PatientPageState extends State<PantientPage> {
                           onTap: () {
                             showPopupMenu(context, patient); // Pass selected patient
                             print("Card tapped");
-                            
                           },
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.2, // 20% screen height
@@ -111,6 +113,12 @@ class _PatientPageState extends State<PantientPage> {
                                     ),
                                   ],
                                 ),
+                                trailing: IconButton(
+                                  icon: Icon(Icons.edit, color: Colors.white),
+                                  onPressed: () {
+                                    showEditDialog(context, updateProvider, patient);
+                                  },
+                                ),
                               ),
                             ),
                           ),
@@ -119,9 +127,7 @@ class _PatientPageState extends State<PantientPage> {
                     );
                   },
                 ),
-
                 const SizedBox(height: 30),
-
                 // 🔹 InkWell Image Button
                 Align(
                   alignment: Alignment.center,
@@ -149,7 +155,6 @@ class _PatientPageState extends State<PantientPage> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
               ],
             ),

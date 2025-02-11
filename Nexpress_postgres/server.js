@@ -70,28 +70,28 @@ app.get('/get_patient/:name', async (req, res) => {
   }
 });
 
-// Update a specific plan_tratamiento row
-app.put('/update_plan/:id', async (req, res) => {
+// Update a specific patient's details
+app.put('/update_patient/:id', async (req, res) => {
     const { id } = req.params;
-    const { diagnostico, fecha_inicio, fecha_fin, piezas, tratamiento } = req.body;
+    const { name, phone, birth_date } = req.body;
 
     try {
         const query = `
-            UPDATE plan_tratamiento
-            SET diagnostico = $1, fecha_inicio = $2, fecha_fin = $3, piezas = $4, tratamiento = $5
-            WHERE id = $6 RETURNING *;
+            UPDATE patient
+            SET name = $1, phone = $2, birth_date = $3
+            WHERE id_patient = $4 RETURNING *;
         `;
-        const values = [diagnostico, fecha_inicio, fecha_fin, piezas, tratamiento, id];
+        const values = [name, phone, birth_date, id];
 
         const result = await pool.query(query, values);
 
         if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Plan not found' });
+            return res.status(404).json({ error: 'Patient not found' });
         }
 
-        res.status(200).json(result.rows[0]); // Return updated row
+        res.status(200).json(result.rows[0]); // Return updated patient
     } catch (err) {
-        console.error('Error updating data in database', err.stack);
+        console.error('Error updating patient in database', err.stack);
         res.status(500).json({ error: 'Database update error' });
     }
 });
