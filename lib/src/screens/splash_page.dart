@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

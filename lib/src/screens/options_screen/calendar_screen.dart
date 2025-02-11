@@ -10,7 +10,6 @@ class PantallaCalendario extends StatefulWidget {
 }
 
 class _PantallaCalendarioState extends State<PantallaCalendario> {
-  final Map<DateTime, List<Map<String, dynamic>>> _appointments = {};
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
 
@@ -40,6 +39,7 @@ class _PantallaCalendarioState extends State<PantallaCalendario> {
 
               // Table Calendar (Month View)
               TableCalendar(
+                
                 
                 firstDay: DateTime.utc(2000, 1, 1),
                 lastDay: DateTime.utc(2100, 12, 31),

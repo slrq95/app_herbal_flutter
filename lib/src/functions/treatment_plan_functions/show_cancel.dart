@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/treatment_plan_services/treatment_plan_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/treatment_plan_services/treatment_plan_provider.dart';
 
 Future<void> showCancelConfirmationDialog(BuildContext context, int index) async {
   return showDialog<void>(

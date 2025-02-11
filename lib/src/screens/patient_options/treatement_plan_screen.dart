@@ -5,7 +5,8 @@ import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/components/custom_card.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
-import 'package:app_herbal_flutter/src/api/treatment_plan_services/treatment_plan_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/treatment_plan_services/treatment_plan_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
   final TextEditingController nameController = TextEditingController(text: 'Nombre del Paciente');
 class TreatmentPlanScreen extends StatefulWidget {
   const TreatmentPlanScreen({super.key});
@@ -19,6 +20,17 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
   @override
   Widget build(BuildContext context) {
     final treatmentProvider = Provider.of<TreatmentPlanProvider>(context);
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final patient = selectedPatientProvider.selectedPatient;
+
+    if (patient == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        body: const Center(
+          child: Text("No se proporcionaron datos del paciente"),
+        ),
+      );
+    }
 
     return SafeArea(
       child: Scaffold(
@@ -53,9 +65,19 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                     ],
                   ),
                 ),
+                const SizedBox(height: 20),                
+                  CustomButton(
+                  text: 'Visualizar Planes de Tratamiento',
+                  width: 200,
+                  color: CustomTheme.tertiaryColor,
+                  onPressed: () {
+                    // Add your navigation or functionality here
+                  },
+                ),
                 const SizedBox(height: 20),
-                                  Container(
+                  Container(
                     width: double.infinity,
+              
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: CustomTheme.containerColor,
@@ -67,9 +89,7 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            nameController.text.isNotEmpty 
-                                ? nameController.text 
-                                : 'Cargando...',
+                            patient.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 22,
@@ -115,6 +135,7 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                 ),
                 const SizedBox(height: 10),
                 CustomButton(
+                  color: CustomTheme.primaryColor,
                   text: 'Agregar Plan',
                   onPressed: treatmentProvider.addTreatment,
                 ),

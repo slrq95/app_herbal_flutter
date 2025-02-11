@@ -7,6 +7,8 @@ import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
 import 'package:app_herbal_flutter/src/functions/payment_functions/cancel_payment.dart';
 import 'package:app_herbal_flutter/src/functions/payment_functions/confirm_payment.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+
 
 class PaymentHistory extends StatefulWidget {
   const PaymentHistory({super.key});
@@ -17,7 +19,6 @@ class PaymentHistory extends StatefulWidget {
 
 class PaymentHistoryState extends State<PaymentHistory> {
   final TextEditingController amountController = TextEditingController();
-  final TextEditingController nameController = TextEditingController(text: 'nombre del paciente');
 @override
   void initState() {
     super.initState();
@@ -26,6 +27,19 @@ class PaymentHistoryState extends State<PaymentHistory> {
 
   @override
   Widget build(BuildContext context) {
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final patient = selectedPatientProvider.selectedPatient;
+
+    if (patient == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        body: const Center(
+          child: Text("No se proporcionaron datos del paciente"),
+        ),
+      );
+    }
+  
+
     return SafeArea(  // Wrap the entire Scaffold with SafeArea
       child: Scaffold(
         backgroundColor: CustomTheme.fillColor,
@@ -65,6 +79,7 @@ class PaymentHistoryState extends State<PaymentHistory> {
                   // Non-editable Patient Name input field
                   Container(
                     width: double.infinity,
+              
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: CustomTheme.containerColor,
@@ -76,9 +91,7 @@ class PaymentHistoryState extends State<PaymentHistory> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            nameController.text.isNotEmpty 
-                                ? nameController.text 
-                                : 'Cargando...',
+                            patient.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 22,

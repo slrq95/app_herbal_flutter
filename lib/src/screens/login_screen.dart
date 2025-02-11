@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
-import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
 import 'package:app_herbal_flutter/src/functions/login_functions/forgot_password.dart';
 import 'package:app_herbal_flutter/src/functions/login_functions/submit_login.dart'; 
 

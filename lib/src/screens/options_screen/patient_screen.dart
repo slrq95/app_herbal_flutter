@@ -4,17 +4,16 @@ import 'package:app_herbal_flutter/src/components/custom_card.dart';
 import 'package:app_herbal_flutter/src/functions/show_patient_dialog.dart';
 import 'package:app_herbal_flutter/src/functions/popup_menu.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/patient_services/patient_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
 
 class PantientPage extends StatefulWidget {
   const PantientPage({super.key});
-    @override
+
+  @override
   State<PantientPage> createState() => _PatientPageState();
 }
 
 class _PatientPageState extends State<PantientPage> {
-
-
   @override
   Widget build(BuildContext context) {
     final patientProvider = Provider.of<PatientProvider>(context, listen: false);
@@ -22,7 +21,7 @@ class _PatientPageState extends State<PantientPage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomTheme.fillColor,
-        body: SingleChildScrollView(
+        body: SingleChildScrollView(  // Single scrollable container
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -68,27 +67,55 @@ class _PatientPageState extends State<PantientPage> {
                   builder: (context, provider, child) {
                     final patients = provider.filteredPatients;
 
-                    return InkWell(
-                      onTap: () {
-                        showPopupMenu(context);
-                        print("Card tapped");
-                      },
-                      child: Container(
-                        height: MediaQuery.of(context).size.height * 0.2, // 20% screen height
-                        width: double.infinity, // Full width
-                        child: CustomCard(
-                          child: ListTile(
-                            title: Text(
-                              patients.isNotEmpty ? patients[0].name : 'No Patient Found',
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                            subtitle: Text(
-                              patients.isNotEmpty ? 'Diagnóstico: ${patients[0].diagnosis}' : '',
-                              style: const TextStyle(color: Colors.grey),
+                    if (patients.isEmpty) {
+                      return const Center(child: Text('No patients found.'));
+                    }
+
+                    return ListView.builder(
+                      shrinkWrap: true,  // Make sure ListView takes only the required space
+                      physics: NeverScrollableScrollPhysics(),  // Disable internal scroll
+                      itemCount: patients.length,
+                      itemBuilder: (context, index) {
+                        final patient = patients[index];
+
+                        return InkWell(
+                          onTap: () {
+                            showPopupMenu(context, patient); // Pass selected patient
+                            print("Card tapped");
+                            
+                          },
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.2, // 20% screen height
+                            width: double.infinity, // Full width
+                            margin: const EdgeInsets.only(bottom: 10.0),
+                            child: CustomCard(
+                              child: ListTile(
+                                title: Text(
+                                  patient.name,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                subtitle: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Phone: ${patient.phone}',
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                    Text(
+                                      'Birth Date: ${patient.birthDate}',
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                    Text(
+                                      'ID: ${patient.id}',
+                                      style: const TextStyle(color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     );
                   },
                 ),

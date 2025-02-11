@@ -1,29 +1,22 @@
 class Patient {
   final String id;
   final String name;
-  final String diagnosis;
+  final String phone;
+  final String birthDate;
 
   Patient({
     required this.id,
     required this.name,
-    required this.diagnosis,
+    required this.phone,
+    required this.birthDate,
   });
 
-  // Convert JSON to a Patient object
-  factory Patient.fromJson(Map<String, String> json) {
+  factory Patient.fromJson(Map<String, dynamic> json) {
     return Patient(
-      id: json['id']!,
-      name: json['name']!,
-      diagnosis: json['diagnosis']!,
+      id: json['id_patient']?.toString() ?? '',
+      name: json['name'] ?? '',
+      phone: json['phone'] ?? '',
+      birthDate: json['birth_date'] ?? '',
     );
-  }
-
-  // Convert a Patient object to JSON
-  Map<String, String> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'diagnosis': diagnosis,
-    };
   }
 }

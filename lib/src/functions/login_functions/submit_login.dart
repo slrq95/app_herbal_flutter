@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'; 
-import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/tools/custom_error.dart';
 import 'package:app_herbal_flutter/src/tools/error_dialog.dart';

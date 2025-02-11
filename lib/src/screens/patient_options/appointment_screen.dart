@@ -4,8 +4,8 @@ import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/appointement_services/appointment_provider.dart';
-
+import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
 class AppointmentPage extends StatefulWidget {
   const AppointmentPage({super.key});
 @override
@@ -13,8 +13,20 @@ class AppointmentPage extends StatefulWidget {
 }
 
 class AppointmentPageState extends State<AppointmentPage> {
+
   @override
   Widget build(BuildContext context) {
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final patient = selectedPatientProvider.selectedPatient;
+
+    if (patient == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        body: const Center(
+          child: Text("No se proporcionaron datos del paciente"),
+        ),
+      );
+    }  
     return Scaffold(
       backgroundColor: CustomTheme.fillColor,
       body: SafeArea(
@@ -62,32 +74,32 @@ class AppointmentPageState extends State<AppointmentPage> {
                     const SizedBox(height: 20),
 
                     // Non-editable Patient Name Container
-                    Container(
-                      width: double.infinity,
-                      height: 60.0,
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1E1E1E), // Background color
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: const Row(
-                        children: [
-                          Icon(Icons.person, color: Colors.white), // User icon
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              "Nombre del Paciente", // Placeholder, replace with real data
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
+                  Container(
+                    width: double.infinity,
+              
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
                     ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            patient.name,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                     const SizedBox(height: 20),
 
                     // Fecha Input (Date Picker)
@@ -127,7 +139,7 @@ class AppointmentPageState extends State<AppointmentPage> {
                     const SizedBox(height: 20),
 
                     // Prioridad Dropdown
-                    DropdownButtonFormField<Prioridad>(
+                    DropdownButtonFormField<Priority>(
                       value: appointmentProvider.selectedPrioridad,
                       dropdownColor: CustomTheme.containerColor,
                       decoration: InputDecoration(
@@ -137,8 +149,8 @@ class AppointmentPageState extends State<AppointmentPage> {
                         filled: true,
                         fillColor: const Color(0xFF1E1E1E),
                       ),
-                      items: Prioridad.values.map((Prioridad value) {
-                        return DropdownMenuItem<Prioridad>(
+                      items: Priority.values.map((Priority value) {
+                        return DropdownMenuItem<Priority>(
                           value: value,
                           child: Text(value.name, style: const TextStyle(color: CustomTheme.lettersColor)),
                         );
@@ -152,7 +164,7 @@ class AppointmentPageState extends State<AppointmentPage> {
                     const SizedBox(height: 20),
 
                     // Tipo Dropdown
-                    DropdownButtonFormField<TipoCita>(
+                    DropdownButtonFormField<TypeAppointment>(
                       value: appointmentProvider.selectedTipoCita,
                       dropdownColor: CustomTheme.containerColor,
                       decoration: InputDecoration(
@@ -162,8 +174,8 @@ class AppointmentPageState extends State<AppointmentPage> {
                         filled: true,
                         fillColor: const Color(0xFF1E1E1E),
                       ),
-                      items: TipoCita.values.map((TipoCita value) {
-                        return DropdownMenuItem<TipoCita>(
+                      items: TypeAppointment.values.map((TypeAppointment value) {
+                        return DropdownMenuItem<TypeAppointment>(
                           value: value,
                           child: Text(value.name, style: const TextStyle(color: CustomTheme.lettersColor)),
                         );
@@ -185,6 +197,8 @@ class AppointmentPageState extends State<AppointmentPage> {
                         text: 'Guardar Datos',
                         color: CustomTheme.buttonColor,
                         onPressed: () {
+                          
+                          
                           // Implement API call to save data
                         },
                       ),

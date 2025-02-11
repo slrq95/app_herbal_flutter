@@ -1,14 +1,14 @@
 import 'package:app_herbal_flutter/src/api/bottom_nav_index_provider.dart';
-import 'package:app_herbal_flutter/src/api/dashboard_provider/dashboard_provider.dart';
-import 'package:app_herbal_flutter/src/api/patient_services/patient_provider.dart';
-import 'package:app_herbal_flutter/src/api/treatment_plan_services/treatment_plan_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/dashboard_provider/dashboard_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/treatment_plan_services/treatment_plan_provider.dart';
 import 'package:app_herbal_flutter/src/tools/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
-import 'package:app_herbal_flutter/src/api/auth_services/dio_auth_provider.dart';
-import 'package:app_herbal_flutter/src/api/appointement_services/appointment_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_provider.dart';
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
   @override
@@ -25,8 +25,9 @@ class Appstate extends StatelessWidget{
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentProvider()),
         ChangeNotifierProvider(create: (_) => TreatmentPlanProvider()),
+        ChangeNotifierProvider(create: (_) => SelectedPatientProvider()),
         
-        //ChangeNotifierProvider(create: (_) => VistaDatosProvider()), 
+        //ChangeNotifierProvider(create: (_) => VistaDatosProvider()),
       ],
       child: const MedicalApp(),
       );

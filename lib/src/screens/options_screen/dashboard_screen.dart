@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/components/custom_container.dart';
 
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/dashboard_provider/dashboard_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/dashboard_provider/dashboard_provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});

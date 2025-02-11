@@ -2,77 +2,97 @@ import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:app_herbal_flutter/src/models/patient_model.dart';
 
-class ClinicalHistoryPage extends StatelessWidget {
+class ClinicalHistoryPage extends StatefulWidget {
   ClinicalHistoryPage({super.key});
 
-  final TextEditingController nameController = TextEditingController(text: "Nombre del Paciente");
-  final TextEditingController historiaClinicaController = TextEditingController();
-  final TextEditingController caracteristicasPacienteController = TextEditingController();
-  final TextEditingController motivoConsultaController = TextEditingController();
+  @override
+  ClinicalHistoryPageState createState() => ClinicalHistoryPageState();
+}
 
+class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
   @override
   Widget build(BuildContext context) {
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final patient = selectedPatientProvider.selectedPatient;
+
+    if (patient == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Error")),
+        body: const Center(
+          child: Text("No se proporcionaron datos del paciente"),
+        ),
+      );
+    }
+  
+
+    final TextEditingController nameController =
+        TextEditingController(text: patient.name);
+    final TextEditingController historiaClinicaController =
+        TextEditingController();
+    final TextEditingController caracteristicasPacienteController =
+        TextEditingController();
+    final TextEditingController motivoConsultaController =
+        TextEditingController();
+
     return Scaffold(
-      backgroundColor: CustomTheme.fillColor, // Dark background color
+      backgroundColor: CustomTheme.fillColor,
       body: Column(
         children: [
-          // Custom container instead of AppBar
-// Top container
-Container(
-  padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
-  width: double.infinity,
-  decoration: const BoxDecoration(
-    color: CustomTheme.containerColor,
-    borderRadius: BorderRadius.only(
-      bottomLeft: Radius.circular(15),
-      bottomRight: Radius.circular(15),
-    ),
-  ),
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Keeps text left and button right
-    children: [
-      const Text(
-        'Historia Clínica',
-        style: TextStyle(
-          color: CustomTheme.lettersColor,
-          fontSize: 26,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      
-      // Wrap button in SizedBox to control size
-      SizedBox(
-        width: 120, // Set a fixed width
-        height: 45, // Set a fixed height
-        child: CustomButton(
-          text: 'Regresar',
-          color: CustomTheme.fillColor,
-          style: const TextStyle(
-            color: CustomTheme.lettersColor,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          // Top container with title and back button
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 16),
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: CustomTheme.containerColor,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Historia Clínica',
+                  style: TextStyle(
+                    color: CustomTheme.lettersColor,
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(
+                  width: 120,
+                  height: 45,
+                  child: CustomButton(
+                    text: 'Regresar',
+                    color: CustomTheme.fillColor,
+                    style: const TextStyle(
+                      color: CustomTheme.lettersColor,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pushReplacementNamed('/home');
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/home');
-          },
-        ),
-      ),
-    ],
-  ),
-),
-
           const SizedBox(height: 10),
-
-          // Wrap the entire content inside Expanded -> SingleChildScrollView
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 children: [
-                  // Non-editable Patient Name input field
+                  // Display patient name
                   Container(
                     width: double.infinity,
+              
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: CustomTheme.containerColor,
@@ -84,9 +104,7 @@ Container(
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            nameController.text.isNotEmpty 
-                                ? nameController.text 
-                                : 'Cargando...',
+                            patient.name,
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 22,
@@ -98,9 +116,7 @@ Container(
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   // Historia Clínica input field
                   CustomInput(
                     controller: historiaClinicaController,
@@ -113,9 +129,7 @@ Container(
                     fillColor: CustomTheme.containerColor,
                     fontSize: 22,
                   ),
-
                   const SizedBox(height: 20),
-
                   // Características del Paciente input field
                   CustomInput(
                     controller: caracteristicasPacienteController,
@@ -128,9 +142,7 @@ Container(
                     fillColor: CustomTheme.containerColor,
                     fontSize: 22,
                   ),
-
                   const SizedBox(height: 20),
-
                   // Motivo de la Consulta input field
                   CustomInput(
                     controller: motivoConsultaController,
@@ -143,10 +155,8 @@ Container(
                     fillColor: CustomTheme.containerColor,
                     fontSize: 22,
                   ),
-
                   const SizedBox(height: 30),
-
-                  // Custom Submit Button
+                  // Submit Button
                   CustomButton(
                     text: 'Guardar Datos',
                     width: 250,
@@ -161,8 +171,7 @@ Container(
                       // Handle form submission here
                     },
                   ),
-
-                  const SizedBox(height: 50), // Extra spacing at the bottom
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
