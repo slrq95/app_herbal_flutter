@@ -10,19 +10,19 @@
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit Patient"),
+        title: const Text("Edit Patient"),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(controller: nameController, decoration: InputDecoration(labelText: "Name")),
-            TextField(controller: phoneController, decoration: InputDecoration(labelText: "Phone")),
-            TextField(controller: birthDateController, decoration: InputDecoration(labelText: "Birth Date")),
+            TextField(controller: nameController, decoration: const InputDecoration(labelText: "Name")),
+            TextField(controller: phoneController, decoration: const InputDecoration(labelText: "Phone")),
+            TextField(controller: birthDateController, decoration: const InputDecoration(labelText: "Birth Date")),
           ],
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("Cancel"),
+            child: const Text("Cancel"),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -34,7 +34,7 @@
               );
               if (success) Navigator.pop(context);
             },
-            child: Text("Save"),
+            child: const Text("Save"),
           ),
         ],
       ),

@@ -6,7 +6,7 @@ import 'package:app_herbal_flutter/src/functions/show_patient_dialog.dart';
 import 'package:app_herbal_flutter/src/functions/popup_menu.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
-import 'package:app_herbal_flutter/src/models/patient_model.dart';
+
 
 class PantientPage extends StatefulWidget {
   const PantientPage({super.key});
@@ -76,7 +76,7 @@ class _PatientPageState extends State<PantientPage> {
 
                     return ListView.builder(
                       shrinkWrap: true,  // Make sure ListView takes only the required space
-                      physics: NeverScrollableScrollPhysics(),  // Disable internal scroll
+                      physics: const NeverScrollableScrollPhysics(),  // Disable internal scroll
                       itemCount: patients.length,
                       itemBuilder: (context, index) {
                         final patient = patients[index];
@@ -114,7 +114,7 @@ class _PatientPageState extends State<PantientPage> {
                                   ],
                                 ),
                                 trailing: IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.white),
+                                  icon: const Icon(Icons.edit, color: Colors.white),
                                   onPressed: () {
                                     showEditDialog(context, updateProvider, patient);
                                   },

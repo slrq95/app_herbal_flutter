@@ -4,10 +4,11 @@ import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/models/patient_model.dart';
+
 
 class ClinicalHistoryPage extends StatefulWidget {
-  ClinicalHistoryPage({super.key});
+  
+  const ClinicalHistoryPage({super.key});
 
   @override
   ClinicalHistoryPageState createState() => ClinicalHistoryPageState();
@@ -29,7 +30,6 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
     }
   
 
-    final TextEditingController nameController =
         TextEditingController(text: patient.name);
     final TextEditingController historiaClinicaController =
         TextEditingController();

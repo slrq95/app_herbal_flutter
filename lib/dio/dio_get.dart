@@ -15,7 +15,7 @@ class DioGet {
         throw Exception('Failed to load patient data');
       }
     } catch (e) {
-      print('Error fetching patient: $e');
+      //print('Error fetching patient: $e');
       return [];
     }
   }

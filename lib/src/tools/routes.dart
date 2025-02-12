@@ -31,7 +31,7 @@ switch(settings.name){
     return MaterialPageRoute(builder: (_) => const AppointmentPage());
 
   case'/ClinicalHistoryPage':
-    return MaterialPageRoute(builder: (_) =>  ClinicalHistoryPage());
+    return MaterialPageRoute(builder: (_) =>  const ClinicalHistoryPage());
 
   case'/PaymentHistoryPage':
     return MaterialPageRoute(builder: (_) =>  const PaymentHistory());

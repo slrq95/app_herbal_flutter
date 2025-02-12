@@ -85,9 +85,9 @@ app.put('/update_patient/:id', async (req, res) => {
 
         const result = await pool.query(query, values);
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ error: 'Patient not found' });
-        }
+       // if (result.rows.length === 0) {
+        //   return res.status(404).json({ error: 'Patient not found' });
+       // }
 
         res.status(200).json(result.rows[0]); // Return updated patient
     } catch (err) {

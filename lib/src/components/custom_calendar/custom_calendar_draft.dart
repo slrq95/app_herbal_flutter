@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_timeline/calendar_timeline.dart';
+import 'package:app_herbal_flutter/src/theme/default.dart';
 
 class CustomCalendarDraft extends StatefulWidget {
   final DateTime initialDate;
@@ -12,10 +13,10 @@ class CustomCalendarDraft extends StatefulWidget {
   });
 
   @override
-  _CustomCalendarDraftState createState() => _CustomCalendarDraftState();
+  CustomCalendarDraftState createState() => CustomCalendarDraftState();
 }
 
-class _CustomCalendarDraftState extends State<CustomCalendarDraft> {
+class CustomCalendarDraftState extends State<CustomCalendarDraft> {
   late DateTime selectedDate;
 
   @override
@@ -27,13 +28,13 @@ class _CustomCalendarDraftState extends State<CustomCalendarDraft> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0x121212),
+      backgroundColor: CustomTheme.fillColor,
       body: Center(
         child: Container(
           height: 200,
           padding: const EdgeInsets.all(12.0),
           decoration: BoxDecoration(
-            color: const Color(0x1E1E1E),
+            color: CustomTheme.containerColor,
             borderRadius: BorderRadius.circular(12.0),
             boxShadow: [
               BoxShadow(

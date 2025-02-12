@@ -7,3 +7,6 @@ making improvements on patient_screen.dart, adding handling state for uddate pat
  making function to update patient data, making dio_update.dart, still remaining UI quickly 
  UI refreshing when updating patient data, thinking and research 
  about Normal forms 1,2 and 3 and the way to implement in my sql database structure.
+11/02/2025/11:12PM
+Fixing warnings, and gradle-wrapper.jar, fixing compatibility with firestore_auth, building apk and
+sincronize java with firebase and gradle, fixing major warnings, improving fetching get code on patient patient_screen
