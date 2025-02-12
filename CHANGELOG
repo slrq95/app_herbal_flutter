@@ -10,3 +10,6 @@ making improvements on patient_screen.dart, adding handling state for uddate pat
 11/02/2025/11:12PM
 Fixing warnings, and gradle-wrapper.jar, fixing compatibility with firestore_auth, building apk and
 sincronize java with firebase and gradle, fixing major warnings, improving fetching get code on patient patient_screen
+12/02/2025/8:42 am
+
+fixing troubles with searching bar, Researching and implementing right structure in my sql tables

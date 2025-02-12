@@ -49,6 +49,9 @@ class _PatientPageState extends State<PantientPage> {
                   child: TextField(
                     controller: patientProvider.searchController,
                     style: const TextStyle(color: Colors.white),
+                    autocorrect: false, // Disables autocorrect
+                    enableSuggestions: false, // Disables word suggestions
+                    keyboardType: TextInputType.text, 
                     decoration: const InputDecoration(
                       hintText: 'Buscar paciente',
                       hintStyle: TextStyle(color: Colors.grey),
@@ -76,7 +79,7 @@ class _PatientPageState extends State<PantientPage> {
 
                     return ListView.builder(
                       shrinkWrap: true,  // Make sure ListView takes only the required space
-                      physics: const NeverScrollableScrollPhysics(),  // Disable internal scroll
+                      physics: NeverScrollableScrollPhysics(),  // Disable internal scroll
                       itemCount: patients.length,
                       itemBuilder: (context, index) {
                         final patient = patients[index];
@@ -114,7 +117,7 @@ class _PatientPageState extends State<PantientPage> {
                                   ],
                                 ),
                                 trailing: IconButton(
-                                  icon: const Icon(Icons.edit, color: Colors.white),
+                                  icon: Icon(Icons.edit, color: Colors.white),
                                   onPressed: () {
                                     showEditDialog(context, updateProvider, patient);
                                   },
