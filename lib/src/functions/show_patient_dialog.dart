@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/dio/dio_post.dart'; // Import Dio service
-
+import 'package:dio/dio.dart';
 final TextEditingController nameController = TextEditingController();
 final TextEditingController phoneController = TextEditingController();
 final TextEditingController birthDateController = TextEditingController();
@@ -21,7 +21,6 @@ void showPatientDialog(BuildContext context) {
       ),
       
       content: SizedBox(
-        
         width: MediaQuery.of(context).size.width * 0.8,
         height: MediaQuery.of(context).size.height * 0.6,
         child: SingleChildScrollView(
@@ -68,23 +67,74 @@ void showPatientDialog(BuildContext context) {
           child: const Text('Cancelar', style: TextStyle(color: CustomTheme.secondaryColor, fontSize: 28)),
         ),
         TextButton(
-          onPressed: () async {
-            // ✅ Prepare patient data
-            Map<String, dynamic> patientData = {
-              'name': nameController.text,
-              'phone': phoneController.text,
-              'birth_date': birthDateController.text,
-              'timestamp_patient_creation': timestamp,
-            };
+onPressed: () async {
+  Map<String, dynamic> patientData = {
+    'name': nameController.text,
+    'phone': phoneController.text,
+    'birth_date': birthDateController.text,
+    'timestamp_patient_creation': timestamp,
+  };
 
-            // ✅ Send to API
-            await DioService().postPatient(patientData);
+  try {
+    final response = await DioService().postPatient(patientData);
 
-            Navigator.pop(context);
-          },
+    if (response?.statusCode == 201) {
+      Navigator.pop(context);
+      showMessage(context, 'Paciente agregado exitosamente');
+    }
+  } catch (e) {
+    if (e is DioException) {
+      String errorMessage = 'Error al agregar el paciente';
+
+      if (e.response != null && e.response!.data != null) {
+        final data = e.response!.data;
+
+        if (data is Map<String, dynamic> && data.containsKey('error')) {
+          errorMessage = data['error']; // Extract the backend error message
+        }
+      }
+
+      showMessage(context, errorMessage);
+    } else {
+      showMessage(context, 'Error desconocido');
+    }
+  }
+},
+
+
           child: const Text('Guardar', style: TextStyle(color: CustomTheme.primaryColor, fontSize: 28)),
         ),
       ],
     ),
   );
+}
+
+/// ✅ Function to show an alert dialog
+void showMessage(BuildContext context, String message) {
+  Future.delayed(Duration.zero, () {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // Prevent accidental dismiss
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          backgroundColor: CustomTheme.containerColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Text(
+            'Información',
+            style: TextStyle(color: CustomTheme.lettersColor, fontSize: 24),
+          ),
+          content: Text(
+            message,
+            style: const TextStyle(color: CustomTheme.lettersColor, fontSize: 20),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(),
+              child: const Text('OK', style: TextStyle(color: CustomTheme.primaryColor, fontSize: 24)),
+            ),
+          ],
+        );
+      },
+    );
+  });
 }

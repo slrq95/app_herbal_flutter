@@ -24,30 +24,40 @@ pool.connect()
 
 // Define a route to insert the treatment plan
 app.post('/add_patient', async (req, res) => {
-  const { name, phone, birth_date, timestamp_patient_creation } = req.body;
-  
-  try {
-      // Log received data for debugging
-      console.log('Received data:', req.body);
+    const { name, phone, birth_date, timestamp_patient_creation } = req.body;
 
-      // Insert into "patient" table
-      const query = `
-          INSERT INTO patient (name, phone, birth_date, timestamp_patient_creation)
-          VALUES ($1, $2, $3, $4) RETURNING *;
-      `;
-      const values = [name, phone, birth_date, timestamp_patient_creation];
+    try {
+        console.log('Received data:', req.body);
 
-      const result = await pool.query(query, values);
+        // ✅ FIX: Use TRIM and ILIKE for case-insensitive match
+        const existingPatient = await pool.query(
+            'SELECT * FROM patient WHERE TRIM(LOWER(name)) = TRIM(LOWER($1))', 
+            [name]
+        );
 
-      console.log('Inserted patient:', result.rows[0]);
+        if (existingPatient.rows.length > 0) {
+            return res.status(409).json({ error: 'Patient already exists' }); // ✅ Stops insertion
+        }
 
-      res.status(201).json(result.rows[0]);
+        // ✅ FIX: Add quotes around query
+        const query = `
+            INSERT INTO patient (name, phone, birth_date, timestamp_patient_creation)
+            VALUES ($1, $2, $3, $4) RETURNING *;
+        `;
 
-  } catch (err) {
-      console.error('Error inserting patient into database', err.stack);
-      res.status(500).json({ error: 'Database insertion error' });
-  }
+        const values = [name, phone, birth_date, timestamp_patient_creation];
+        const result = await pool.query(query, values);
+
+        console.log('Inserted patient:', result.rows[0]);
+
+        res.status(201).json(result.rows[0]);
+
+    } catch (err) {
+        console.error('Error inserting patient into database', err.stack);
+        res.status(500).json({ error: 'Database insertion error' });
+    }
 });
+
 
 // Fetch all treatment plans as JSON
 app.get('/get_patient/:name', async (req, res) => {

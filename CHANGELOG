@@ -13,3 +13,9 @@ sincronize java with firebase and gradle, fixing major warnings, improving fetch
 12/02/2025/8:42 am
 
 fixing troubles with searching bar, Researching and implementing right structure in my sql tables
+12/02/2025 5:51 pm 
+Handling if patient is already inserted to patient table in my app_herbal database, still remaining showing in UI
+and ordering folders and files as they should be order to get the proper project structure.
+making structrure of my database tables and how I will handle data in order to keep maintenance,avoiding repeat data
+ making easy to give maintenance service, reduce troubles with connections, post, get, put and delete and thinking
+ how reference logic will be handle in code logic and not in the structrure of my tables.

@@ -8,16 +8,18 @@ class DioService {
   ));
 
   // ✅ Function to send patient data
-  Future<void> postPatient(Map<String, dynamic> data) async {
+  Future<Response?> postPatient(Map<String, dynamic> data) async {
     try {
       final response = await _dio.post('/add_patient', data: data);
       print('Response: ${response.data}');
+      return response; // Return the response object
+    } on DioException catch (e) {
+      print('DioError: ${e.response?.data ?? e.message}');
+      return e.response; // Return the response to handle errors properly
     } catch (e) {
-      if (e is DioException) {
-        print('DioError: ${e.response?.data ?? e.message}');
-      } else {
-        print('Error: $e');
-      }
+      print('Error: $e');
+      return null; // Return null for unexpected errors
     }
   }
 }
+
