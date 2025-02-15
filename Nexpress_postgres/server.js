@@ -24,7 +24,7 @@ pool.connect()
 
 // Define a route to insert the treatment plan
 app.post('/add_patient', async (req, res) => {
-    const { name, phone, birth_date, timestamp_patient_creation } = req.body;
+    const { name, phone, birth_date, created_at} = req.body;
 
     try {
         console.log('Received data:', req.body);
@@ -41,11 +41,11 @@ app.post('/add_patient', async (req, res) => {
 
         // ✅ FIX: Add quotes around query
         const query = `
-            INSERT INTO patient (name, phone, birth_date, timestamp_patient_creation)
+            INSERT INTO patient (name, phone, birth_date, created_at)
             VALUES ($1, $2, $3, $4) RETURNING *;
         `;
 
-        const values = [name, phone, birth_date, timestamp_patient_creation];
+        const values = [name, phone, birth_date, created_at];
         const result = await pool.query(query, values);
 
         console.log('Inserted patient:', result.rows[0]);
@@ -57,6 +57,29 @@ app.post('/add_patient', async (req, res) => {
         res.status(500).json({ error: 'Database insertion error' });
     }
 });
+
+// Insert clinical history
+app.post('/add_clinical_history', async (req, res) => {
+    const { id_patient, clinical_history, patient_characteristics, consult_reason, created_at } = req.body;
+
+    try {
+        const query = `
+            INSERT INTO clinical_history (id_patient, clinical_history, patient_characteristics, consult_reason, created_at)
+            VALUES ($1, $2, $3::jsonb, $4, $5) RETURNING *;
+        `;
+
+        const values = [id_patient, clinical_history, patient_characteristics, consult_reason, created_at];
+        const result = await pool.query(query, values);
+
+        console.log('Inserted clinical history:', result.rows[0]);
+
+        res.status(201).json(result.rows[0]); // Return the inserted data
+    } catch (err) {
+        console.error('Error inserting clinical history into database', err.stack);
+        res.status(500).json({ error: 'Database insertion error' });
+    }
+});
+
 
 
 // Fetch all treatment plans as JSON
@@ -79,11 +102,31 @@ app.get('/get_patient/:name', async (req, res) => {
       res.status(500).json({ error: 'Database fetch error' });
   }
 });
+// fetching clinical history data
+app.get('/get_clinical_history/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'SELECT * FROM clinical_history WHERE id_patient = $1',
+            [id]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'No clinical history found' });
+        }
+
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Error fetching clinical history:', err);
+        res.status(500).json({ error: 'Database fetch error' });
+    }
+});
 
 // Update a specific patient's details
 app.put('/update_patient/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, phone, birth_date } = req.body;
+    const { name, phone, birth_date} = req.body;
 
     try {
         const query = `
