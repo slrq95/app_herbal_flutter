@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+<<<<<<< HEAD
+=======
+import 'package:flutter/foundation.dart';
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 
 class DioUpdate {
   final Dio _dio = Dio(
@@ -21,7 +25,11 @@ class DioUpdate {
       // Check if status code is 200 and return a boolean value.
       return response.statusCode == 200;
     } catch (e) {
+<<<<<<< HEAD
       print("Error updating patient: $e");
+=======
+      debugPrint("Error updating patient: $e");
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
       return false;
     }
   }

@@ -32,6 +32,10 @@
                 phoneController.text,
                 birthDateController.text,
               );
+<<<<<<< HEAD
+=======
+              if (!context.mounted) return;
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
               if (success) Navigator.pop(context);
             },
             child: const Text("Save"),

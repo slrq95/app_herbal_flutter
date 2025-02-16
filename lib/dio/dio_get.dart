@@ -1,4 +1,8 @@
 import 'package:dio/dio.dart';
+<<<<<<< HEAD
+=======
+import 'package:flutter/foundation.dart';
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 
 class DioGet {
   final Dio _dio = Dio(
@@ -33,7 +37,11 @@ class DioGet {
       }
     } catch (e) {
       // Handle error here
+<<<<<<< HEAD
       print("Error fetching clinical history: $e");
+=======
+      debugPrint("Error fetching clinical history: $e");
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
       return [];
     }
   }

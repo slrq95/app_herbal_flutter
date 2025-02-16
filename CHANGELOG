@@ -18,4 +18,11 @@ Handling if patient is already inserted to patient table in my app_herbal databa
 and ordering folders and files as they should be order to get the proper project structure.
 making structrure of my database tables and how I will handle data in order to keep maintenance,avoiding repeat data
  making easy to give maintenance service, reduce troubles with connections, post, get, put and delete and thinking
+<<<<<<< HEAD
  how reference logic will be handle in code logic and not in the structrure of my tables.
+=======
+ how reference logic will be handle in code logic and not in the structrure of my tables.
+
+15/02/2025 8:56pm
+refactoring code, separating logic, from state management and also from UI in Login_screen, clinical_history. Improving the way to handle data to API and implementing references in coding instead of structure, thinking a designing of treatment plan and payment tables. 
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)

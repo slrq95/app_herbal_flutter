@@ -79,7 +79,11 @@ class _PatientPageState extends State<PantientPage> {
 
                     return ListView.builder(
                       shrinkWrap: true,  // Make sure ListView takes only the required space
+<<<<<<< HEAD
                       physics: NeverScrollableScrollPhysics(),  // Disable internal scroll
+=======
+                      physics: const NeverScrollableScrollPhysics(),  // Disable internal scroll
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
                       itemCount: patients.length,
                       itemBuilder: (context, index) {
                         final patient = patients[index];
@@ -87,7 +91,11 @@ class _PatientPageState extends State<PantientPage> {
                         return InkWell(
                           onTap: () {
                             showPopupMenu(context, patient); // Pass selected patient
+<<<<<<< HEAD
                             print("Card tapped");
+=======
+                            debugPrint("Card tapped");
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
                           },
                           child: Container(
                             height: MediaQuery.of(context).size.height * 0.2, // 20% screen height
@@ -117,7 +125,11 @@ class _PatientPageState extends State<PantientPage> {
                                   ],
                                 ),
                                 trailing: IconButton(
+<<<<<<< HEAD
                                   icon: Icon(Icons.edit, color: Colors.white),
+=======
+                                  icon: const Icon(Icons.edit, color: Colors.white),
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
                                   onPressed: () {
                                     showEditDialog(context, updateProvider, patient);
                                   },

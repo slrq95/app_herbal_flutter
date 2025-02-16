@@ -54,6 +54,10 @@ Future<void> showCancelAppointmentConfirmationDialog(BuildContext context) async
 void _cancelAppointment() {
   // API call to update the status to 'cancelada'
   // Assuming you have an API function to handle this
+<<<<<<< HEAD
   print("Cita cancelada y estado actualizado a 'cancelada'");
+=======
+  debugPrint("Cita cancelada y estado actualizado a 'cancelada'");
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
   // Implement your API call here to change the status to 'cancelada'
 }

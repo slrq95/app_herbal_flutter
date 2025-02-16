@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+// ignore_for_file: depend_on_referenced_packages
+
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -12,10 +17,17 @@ class CustomCalendar extends StatefulWidget {
   });
 
   @override
+<<<<<<< HEAD
   _CustomCalendarState createState() => _CustomCalendarState();
 }
 
 class _CustomCalendarState extends State<CustomCalendar> {
+=======
+  CustomCalendarState createState() => CustomCalendarState();
+}
+
+class CustomCalendarState extends State<CustomCalendar> {
+>>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
   late DateTime selectedDate;
   late List<DateTime> weekDates;
 
