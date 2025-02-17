@@ -26,3 +26,9 @@ making structrure of my database tables and how I will handle data in order to k
 15/02/2025 8:56pm
 refactoring code, separating logic, from state management and also from UI in Login_screen, clinical_history. Improving the way to handle data to API and implementing references in coding instead of structure, thinking a designing of treatment plan and payment tables. 
 >>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
+
+16/02/2025 9:47 PM 
+
+making and separating logic, from state management and also from UI in treatment_plan_screen, insertion to treatment_plan table on my app_herbal postgresql database. handle data to API and implementing references in coding instead of structure, thinking a designing fetching data from treatment_plan table to show in UI and thinking and designing logic and handling data of payment table. 
+
+
