@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart'; 
-<<<<<<< HEAD
-import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
-=======
 import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/tools/custom_error.dart';
 import 'package:app_herbal_flutter/src/tools/error_dialog.dart';

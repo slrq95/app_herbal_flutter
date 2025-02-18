@@ -77,11 +77,7 @@ onPressed: () async {
 
   try {
     final response = await DioService().postPatient(patientData);
-<<<<<<< HEAD
-
-=======
     if (!context.mounted) return;
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
     if (response?.statusCode == 201) {
       Navigator.pop(context);
       showMessage(context, 'Paciente agregado exitosamente');
@@ -97,16 +93,10 @@ onPressed: () async {
           errorMessage = data['error']; // Extract the backend error message
         }
       }
-<<<<<<< HEAD
-
-      showMessage(context, errorMessage);
-    } else {
-=======
       if (!context.mounted) return;
       showMessage(context, errorMessage);
     } else {
       if (!context.mounted) return;
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
       showMessage(context, 'Error desconocido');
     }
   }
@@ -123,13 +113,9 @@ onPressed: () async {
 /// ✅ Function to show an alert dialog
 void showMessage(BuildContext context, String message) {
   Future.delayed(Duration.zero, () {
-<<<<<<< HEAD
-    showDialog(
-=======
     if (!context.mounted) return;
     showDialog(
       
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
       context: context,
       barrierDismissible: false, // Prevent accidental dismiss
       builder: (BuildContext dialogContext) {

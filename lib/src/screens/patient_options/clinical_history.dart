@@ -4,10 +4,6 @@ import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
 import 'package:provider/provider.dart';
-<<<<<<< HEAD
-import 'package:app_herbal_flutter/dio/dio_post.dart';
-=======
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 import 'package:app_herbal_flutter/src/api/provider/clinical_history/clinical_history_provider.dart';
 
 class ClinicalHistoryPage extends StatefulWidget {
@@ -18,11 +14,7 @@ class ClinicalHistoryPage extends StatefulWidget {
 }
 
 class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
-<<<<<<< HEAD
- // Prevent multiple fetches
-=======
  
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
   late TextEditingController clinicalHistoryController;
   late TextEditingController patientCharacteristicsController;
   late TextEditingController consultReasonController;
@@ -140,23 +132,6 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
                   ),
                   const SizedBox(height: 20),
                   // Historia Clínica input field
-<<<<<<< HEAD
-Consumer<ClinicalHistoryProvider>(
-  builder: (context, provider, child) {
-    return CustomInput(
-      controller: provider.clinicalHistoryController,  // Use the controller
-      keyboardType: TextInputType.text,
-      labelText: 'Historia Clínica',
-      hintText: 'Ingrese la historia clínica del paciente',
-      icon: Icons.history,
-      borderColor: Colors.transparent,
-      iconColor: Colors.white,
-      fillColor: CustomTheme.containerColor,
-      fontSize: 22,
-    );
-  },
-),
-=======
                   Consumer<ClinicalHistoryProvider>(
                     builder: (context, provider, child) {
                       return CustomInput(
@@ -172,7 +147,6 @@ Consumer<ClinicalHistoryProvider>(
                       );
                     },
                   ),
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
                   const SizedBox(height: 20),
                   // Características del Paciente input field
                 Consumer<ClinicalHistoryProvider>(
@@ -224,37 +198,6 @@ Consumer<ClinicalHistoryProvider>(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
-<<<<<<< HEAD
-onPressed: () async {
-  final dioService = DioService();
-  final provider = Provider.of<ClinicalHistoryProvider>(context, listen: false);
-
-  Map<String, dynamic> clinicalHistoryData = {
-    "id_patient": patient.id,
-    "clinical_history": provider.clinicalHistoryController.text,
-    "patient_characteristics": {
-      "details": provider.patientCharacteristicsController.text,
-    },
-    "consult_reason": provider.consultReasonController.text,
-    "created_at": DateTime.now().toIso8601String(),
-  };
-
-  final response = await dioService.postClinicalHistory(clinicalHistoryData);
-
-  if (response != null && response.statusCode == 201) {
-    if (!context.mounted) return;
-    Navigator.pushNamed(context, '/home');
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Historia Clínica guardada con éxito!")),
-    );
-  } else {
-    if (!context.mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Error al guardar los datos")),
-    );
-  }
-},
-=======
                           onPressed: () async {
                             final provider = Provider.of<ClinicalHistoryProvider>(context, listen: false);
                             bool success = await provider.createClinicalHistory(patient.id);
@@ -272,7 +215,6 @@ onPressed: () async {
                               );
                             }
                           },
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
                         ),
                       // Show "Actualizar Datos" only if data is fetched
                       if (clinicalHistoryProvider.isDataFetched) 
