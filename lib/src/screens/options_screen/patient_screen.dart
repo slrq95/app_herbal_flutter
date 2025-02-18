@@ -119,7 +119,7 @@ class _PatientPageState extends State<PantientPage> {
                                 trailing: IconButton(
                                   icon: const Icon(Icons.edit, color: Colors.white),
                                   onPressed: () {
-                                    showEditDialog(context, updateProvider, patient);
+                                    showEditDialog(context, updateProvider, patientProvider, patient);
                                   },
                                 ),
                               ),

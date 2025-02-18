@@ -58,16 +58,18 @@ void selectPatient(Patient patient, String id) { // ✅ Change `id` to String
 class PatientUpdateProvider extends ChangeNotifier {
   final DioUpdate dioUpdate = DioUpdate();
 
-  Future<bool> updatePatient(Patient patient, String newName, String newPhone, String newBirthDate) async {
-    bool success = await dioUpdate.updatePatient(patient.id, newName, newPhone, newBirthDate );
-    if (success) {
-      patient.name = newName;
-      patient.phone = newPhone;
-      patient.birthDate = newBirthDate;
+Future<bool> updatePatient(Patient patient, String newName, String newPhone, String newBirthDate, PatientProvider patientProvider) async {
+  bool success = await dioUpdate.updatePatient(patient.id, newName, newPhone, newBirthDate);
+  if (success) {
+    patient.name = newName;
+    patient.phone = newPhone;
+    patient.birthDate = newBirthDate;
 
-      notifyListeners();
-    }
-    return success;
+    notifyListeners(); // Notify PatientUpdateProvider listeners
+    patientProvider.forceNotify(); // Force UI refresh in PatientProvider
   }
+  return success;
+}
+
   
 }

@@ -72,7 +72,7 @@ onPressed: () async {
     'name': nameController.text,
     'phone': phoneController.text,
     'birth_date': birthDateController.text,
-    'timestamp_patient_creation': timestamp,
+    'created_at': timestamp,
   };
 
   try {
@@ -81,6 +81,10 @@ onPressed: () async {
     if (response?.statusCode == 201) {
       Navigator.pop(context);
       showMessage(context, 'Paciente agregado exitosamente');
+      // Clear the text fields after successful save
+      nameController.clear();
+      phoneController.clear();
+      birthDateController.clear();
     }
   } catch (e) {
     if (e is DioException) {
