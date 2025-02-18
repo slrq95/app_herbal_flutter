@@ -58,6 +58,50 @@ app.post('/add_patient', async (req, res) => {
     }
 });
 
+// Insert clinical history
+app.post('/add_clinical_history', async (req, res) => {
+    const { id_patient, clinical_history, patient_characteristics, consult_reason, created_at } = req.body;
+
+    try {
+        const query = `
+            INSERT INTO clinical_history (id_patient, clinical_history, patient_characteristics, consult_reason, created_at)
+            VALUES ($1, $2, $3::jsonb, $4, $5) RETURNING *;
+        `;
+
+        const values = [id_patient, clinical_history, patient_characteristics, consult_reason, created_at];
+        const result = await pool.query(query, values);
+
+        console.log('Inserted clinical history:', result.rows[0]);
+
+        res.status(201).json(result.rows[0]); // Return the inserted data
+    } catch (err) {
+        console.error('Error inserting clinical history into database', err.stack);
+        res.status(500).json({ error: 'Database insertion error' });
+    }
+});
+// Add the treatment plan
+app.post('/add_treatment_plan', async (req, res) => {
+    const { id_patient, body_part, plan_treatment, price,created_at, updated_at } = req.body;
+  
+    try {
+      console.log('Received treatment plan data:', req.body);
+  
+      const query = `
+        INSERT INTO treatment_plan (id_patient, body_part, plan_treatment, price, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+      `;
+      const values = [id_patient, body_part, plan_treatment, price, created_at, updated_at];
+  
+      const result = await pool.query(query, values);
+      console.log('Inserted treatment plan:', result.rows[0]);
+  
+      res.status(201).json(result.rows[0]);
+    } catch (err) {
+      console.error('Error inserting treatment plan into database', err.stack);
+      res.status(500).json({ error: 'Database insertion error' });
+    }
+  });
+
 
 // Fetch all treatment plans as JSON
 app.get('/get_patient/:name', async (req, res) => {

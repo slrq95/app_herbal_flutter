@@ -19,8 +19,8 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final treatmentProvider = Provider.of<TreatmentPlanProvider>(context);
-    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final treatmentProvider = Provider.of<TreatmentPlanProvider>(context, listen: false);
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
     final patient = selectedPatientProvider.selectedPatient;
 
     if (patient == null) {
@@ -102,6 +102,32 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                     ),
                   ),
 
+                  Container(
+                    width: double.infinity,
+              
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.perm_identity_rounded, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            patient.id,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 // Input fields and Add Plan Button
                 CustomInput(
                   controller: treatmentProvider.bodyPartController,
@@ -134,11 +160,13 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                   fillColor: CustomTheme.containerColor,
                 ),
                 const SizedBox(height: 10),
-                CustomButton(
-                  color: CustomTheme.primaryColor,
-                  text: 'Agregar Plan',
-                  onPressed: treatmentProvider.addTreatment,
-                ),
+CustomButton(
+  color: CustomTheme.primaryColor,
+  text: 'Agregar Plan',
+  onPressed: () {
+    treatmentProvider.addTreatment(patient.id); // Remove await
+  },
+),
                 const SizedBox(height: 20),
 
                 // List of Treatment Cards
@@ -157,26 +185,20 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                              // Row for Patient Name
-                                Row(
-                                  children: [
-                                    const Icon(Icons.person, color: Colors.white),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        'Paciente: ${nameController.text}',
-                                        style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                     const Divider(color: Colors.white24, thickness: 1), // Optional divider
-
+                                    Row(
+                                      children: [
+                                        const Icon(Icons.person, color: Colors.white),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Text(
+                                            'id: ${treatment['id_patient']}',
+                                            style: const TextStyle(fontSize: 16, color: Colors.white),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     // Row for Body Part
                                     Row(
                                       children: [
@@ -256,10 +278,12 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                           const SizedBox(height: 10),
 
                           // Save Button
-                          CustomButton(
-                            text: 'Guardar Datos',
-                            onPressed: () {},
-                          ),
+CustomButton(
+  text: 'Guardar Datos',
+  onPressed: () async {
+    await treatmentProvider.saveTreatmentPlan();  // Call the method to save the treatment plan
+  },
+),
                         ],
                       );
                     },
