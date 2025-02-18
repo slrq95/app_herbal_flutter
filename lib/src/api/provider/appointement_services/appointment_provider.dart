@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-=======
 // ignore_for_file: depend_on_referenced_packages
 
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -33,21 +30,14 @@ class AppointmentProvider extends ChangeNotifier {
       notifyListeners(); // Notify UI of changes
     }
   }
-<<<<<<< HEAD
-
-=======
   
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
   Future<void> selectTime(BuildContext context, TextEditingController controller) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.now(),
     );
     if (pickedTime != null) {
-<<<<<<< HEAD
-=======
       if (!context.mounted) return;
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
       controller.text = pickedTime.format(context);
       notifyListeners();
     }

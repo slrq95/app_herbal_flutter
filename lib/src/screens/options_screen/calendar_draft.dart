@@ -6,17 +6,10 @@ class ScreenCalendar extends StatefulWidget {
   const ScreenCalendar({super.key});
 
   @override
-<<<<<<< HEAD
-  _ScreenCalendarState createState() => _ScreenCalendarState();
-}
-
-class _ScreenCalendarState extends State<ScreenCalendar> {
-=======
   ScreenCalendarState createState() => ScreenCalendarState();
 }
 
 class ScreenCalendarState extends State<ScreenCalendar> {
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
   DateTime selectedDate = DateTime.now();
 
   void _onDateSelected(DateTime date) {

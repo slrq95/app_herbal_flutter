@@ -8,11 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/api/payment_provider.dart';
-<<<<<<< HEAD
-import 'package:app_herbal_flutter/src/api/provider/auth_services/dio_auth_provider.dart';
-=======
 import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
->>>>>>> f4e8f26 (FEAT/FIX/CLINICAL_HISTORY/LOGIN)
 import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_provider.dart';
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
