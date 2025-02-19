@@ -19,8 +19,3 @@ and ordering folders and files as they should be order to get the proper project
 making structrure of my database tables and how I will handle data in order to keep maintenance,avoiding repeat data
  making easy to give maintenance service, reduce troubles with connections, post, get, put and delete and thinking
  how reference logic will be handle in code logic and not in the structrure of my tables.
- 14/02/2025 9:01pm
- handling logic references with coding, making improvements on clinical_history, clinical_history_provider, clinical_history_services
- eliminating warnings and advices, trying to improve my logic handle, state handle, backend API, and
- taking advantage of the benefits of postgresql making functions and triggers to handle update_at TIMESTAMP and logic
- references trough code, instead of tables structure.
