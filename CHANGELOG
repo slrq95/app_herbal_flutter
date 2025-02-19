@@ -19,3 +19,7 @@ and ordering folders and files as they should be order to get the proper project
 making structrure of my database tables and how I will handle data in order to keep maintenance,avoiding repeat data
  making easy to give maintenance service, reduce troubles with connections, post, get, put and delete and thinking
  how reference logic will be handle in code logic and not in the structrure of my tables.
+
+18/02/2025 8:40
+
+handling of references with frontend code between, payment, patient and treatment_plan tables, making it works, still remaining separating code from payment_provider.dart, research and learning about git
