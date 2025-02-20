@@ -79,7 +79,28 @@ app.post('/add_clinical_history', async (req, res) => {
         res.status(500).json({ error: 'Database insertion error' });
     }
 });
-
+// Add the treatment plan
+app.post('/add_treatment_plan', async (req, res) => {
+    const { id_patient, body_part, plan_treatment, price,created_at, updated_at } = req.body;
+  
+    try {
+      console.log('Received treatment plan data:', req.body);
+  
+      const query = `
+        INSERT INTO treatment_plan (id_patient, body_part, plan_treatment, price, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;
+      `;
+      const values = [id_patient, body_part, plan_treatment, price, created_at, updated_at];
+  
+      const result = await pool.query(query, values);
+      console.log('Inserted treatment plan:', result.rows[0]);
+  
+      res.status(201).json(result.rows[0]);
+    } catch (err) {
+      console.error('Error inserting treatment plan into database', err.stack);
+      res.status(500).json({ error: 'Database insertion error' });
+    }
+  });
 
 
 // Fetch all treatment plans as JSON
@@ -122,6 +143,31 @@ app.get('/get_clinical_history/:id', async (req, res) => {
         res.status(500).json({ error: 'Database fetch error' });
     }
 });
+
+// Fetch treatment plans for a specific patient
+app.get('/get_treatment_plans', async (req, res) => {
+    const { id_patient } = req.query; // Get the patient ID from query params
+  
+    if (!id_patient) {
+      return res.status(400).json({ error: 'Patient ID is required' });
+    }
+  
+    try {
+      const result = await pool.query(
+        'SELECT id_plan, id_patient, body_part, plan_treatment, created_at, price FROM treatment_plan WHERE id_patient = $1',
+        [id_patient] // Filter by the specific patient ID
+      );
+  
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'No treatment plans found for this patient' });
+      }
+  
+      res.json(result.rows);
+    } catch (err) {
+      console.error('Error fetching treatment plans:', err.stack);
+      res.status(500).json({ error: 'Database fetch error' });
+    }
+  });
 
 // Update a specific patient's details
 app.put('/update_patient/:id', async (req, res) => {
