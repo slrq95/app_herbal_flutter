@@ -26,3 +26,7 @@ handling of references with frontend code between, payment, patient and treatmen
 19/02/2025 6:37PM
 making treatment_plan_view and relating with patient and treatment_plan, services and patient_provider
 still remaining implementing code logic relationship between patient,treatment_plan and payment tables
+
+18/02/2025 8:40
+
+handling of references with frontend code between, payment, patient and treatment_plan tables, making it works, still remaining separating code from payment_provider.dart, research and learning about git
