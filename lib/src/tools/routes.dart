@@ -3,9 +3,11 @@ import 'package:app_herbal_flutter/src/screens/login_screen.dart';
 
 import 'package:app_herbal_flutter/src/screens/options_screen/options_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/appointment_screen.dart';
-import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history/clinical_history.dart';
-import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history/odontrogram.dart';
+
+
 import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_screen.dart';
+
+import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history/clinical_history.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/treatment_plan/treatement_plan_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/treatment_plan/treatment_plan_view.dart';
 import 'package:app_herbal_flutter/src/screens/splash_page.dart';
@@ -47,8 +49,6 @@ case '/PaymentHistoryPage':
   case'/TreatmentPlanPage':
     return MaterialPageRoute(builder: (_) =>  const TreatmentPlanScreen());
 
-  case'/OdontogramPage':
-    return MaterialPageRoute(builder: (_) =>  const OdotogramScreen());
 
 case '/TreatmentPlanView':
   final dynamic patientId = settings.arguments as dynamic; // Retrieve patientId from arguments
@@ -58,6 +58,7 @@ case '/TreatmentPlanView':
   return MaterialPageRoute(
     builder: (_) => TreatmentPlanView(patientId: patientId),
   );
+
   default:
     _errorRoute();
     }
