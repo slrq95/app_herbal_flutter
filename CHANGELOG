@@ -23,10 +23,17 @@ making structrure of my database tables and how I will handle data in order to k
 
 handling of references with frontend code between, payment, patient and treatment_plan tables, making it works, still remaining separating code from payment_provider.dart, research and learning about git
 
+18/02/2025 8:40
+
+handling of references with frontend code between, payment, patient and treatment_plan tables, making it works, still remaining separating code from payment_provider.dart, research and learning about git
+
 19/02/2025 6:37PM
 making treatment_plan_view and relating with patient and treatment_plan, services and patient_provider
 still remaining implementing code logic relationship between patient,treatment_plan and payment tables
 
-18/02/2025 8:40
+24/02/2025 
+implementing logic a relationship between patient, payment, treatment_plan tables separating Logic from UI and making it works smoothly without affect it if treatment_plans are affected, we relate patient with treatment_plan and patient with payment, so in that case, even if plan change of price of anything, it wont affect logic code that handles payments, and remaining balance.
 
-handling of references with frontend code between, payment, patient and treatment_plan tables, making it works, still remaining separating code from payment_provider.dart, research and learning about git
+
+
+

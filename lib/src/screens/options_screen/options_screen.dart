@@ -41,7 +41,7 @@ class PaginaPrincipal extends StatelessWidget {
                 height: 80,
                 color: CustomTheme.containerColor,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
@@ -50,11 +50,11 @@ class PaginaPrincipal extends StatelessWidget {
                         tag: 'signOutIcon',
                         child: Image.asset(
                           'lib/src/assets/images/sign_out.png',
-                          width: 120.0,
-                          height: 120.0,
+                          width: 190.0,
+                          height: 190.0,
                         ),
                       ),
-                      iconSize: 60.0,
+                      iconSize: 80.0,
                     ),
                   ],
                 ),

@@ -6,6 +6,9 @@ class CustomCard extends StatelessWidget {
   final EdgeInsets? padding;
   final BorderRadius? borderRadius;
   final Color color;
+  final dynamic crossAxisSize;
+  final dynamic elevation;
+  final dynamic shape;
 
   const CustomCard({
     super.key,
@@ -14,6 +17,9 @@ class CustomCard extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.color = CustomTheme.containerColor,
+    this.crossAxisSize,
+    this.elevation,
+    this.shape,
   });
 
   @override

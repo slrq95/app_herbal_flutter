@@ -5,7 +5,7 @@ import 'package:app_herbal_flutter/src/components/custom_input.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/clinical_history/clinical_history_provider.dart';
-
+  
 class ClinicalHistoryPage extends StatefulWidget {
   const ClinicalHistoryPage({super.key});
 

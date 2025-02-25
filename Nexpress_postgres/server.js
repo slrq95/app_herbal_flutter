@@ -102,6 +102,36 @@ app.post('/add_treatment_plan', async (req, res) => {
     }
   });
 
+  // ✅ Handle Payment Data - Insert a Payment
+app.post('/add_payment', async (req, res) => {
+  const { id_patient, id_plan, actual_payment , remanent_payment, created_at } = req.body;
+
+  try {
+    console.log('Received Payment Data:', req.body);
+
+    // ✅ Validate input
+    if (!id_patient || !id_plan || !actual_payment || !remanent_payment || !created_at) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // ✅ Insert payment into the database
+    const query = `
+      INSERT INTO payment (id_patient, id_plan, actual_payment, remanent_payment, created_at)
+      VALUES ($1, $2, $3, $4, $5) RETURNING *;
+    `;
+    const values = [id_patient, id_plan, actual_payment, remanent_payment, created_at];
+    
+    const result = await pool.query(query, values);
+
+    console.log('Payment Inserted:', result.rows[0]);
+    res.status(201).json(result.rows[0]);
+
+  } catch (err) {
+    console.error('Error inserting payment:', err.stack);
+    res.status(500).json({ error: 'Database insertion error' });
+  }
+});
+
 
 // Fetch all treatment plans as JSON
 app.get('/get_patient/:name', async (req, res) => {
@@ -154,7 +184,7 @@ app.get('/get_treatment_plans', async (req, res) => {
   
     try {
       const result = await pool.query(
-        'SELECT id_plan, id_patient, body_part, plan_treatment, created_at, price FROM treatment_plan WHERE id_patient = $1',
+        'SELECT id_plan, id_patient, body_part, plan_treatment, created_at, price, updated_at FROM treatment_plan WHERE id_patient = $1',
         [id_patient] // Filter by the specific patient ID
       );
   
@@ -193,6 +223,41 @@ app.put('/update_patient/:id', async (req, res) => {
         console.error('Error updating patient in database', err.stack);
         res.status(500).json({ error: 'Database update error' });
     }
+});
+
+app.put('/update_treatment_plan/:id', async (req, res) => {
+  const { id } = req.params; // Get plan ID from URL params
+  const { plan_treatment, body_part, price, note } = req.body; // Get updated values from request body
+
+  try {
+      // Ensure required fields are provided
+      if (!plan_treatment || !body_part || !price || !note) {
+          return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      // Update query
+      const query = `
+          UPDATE treatment_plan
+          SET plan_treatment = $1, body_part = $2, price = $3, note = $4, updated_at = NOW()
+          WHERE id_plan = $5
+          RETURNING *;
+      `;
+
+      const values = [plan_treatment, body_part, price, note, id];
+
+      const result = await pool.query(query, values);
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Treatment plan not found' });
+      }
+
+      console.log('Updated treatment plan:', result.rows[0]);
+      res.status(200).json(result.rows[0]); // Return updated plan
+
+  } catch (err) {
+      console.error('Error updating treatment plan:', err.stack);
+      res.status(500).json({ error: 'Database update error' });
+  }
 });
 
 // Start the Express server
