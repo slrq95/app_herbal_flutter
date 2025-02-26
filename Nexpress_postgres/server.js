@@ -104,22 +104,22 @@ app.post('/add_treatment_plan', async (req, res) => {
 
   // ✅ Handle Payment Data - Insert a Payment
 app.post('/add_payment', async (req, res) => {
-  const { id_patient, id_plan, actual_payment , remanent_payment, created_at } = req.body;
+  const { id_patient, actual_payment , created_at } = req.body;
 
   try {
     console.log('Received Payment Data:', req.body);
 
     // ✅ Validate input
-    if (!id_patient || !id_plan || !actual_payment || !remanent_payment || !created_at) {
+    if (!id_patient || !actual_payment || !created_at) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
     // ✅ Insert payment into the database
     const query = `
-      INSERT INTO payment (id_patient, id_plan, actual_payment, remanent_payment, created_at)
-      VALUES ($1, $2, $3, $4, $5) RETURNING *;
+      INSERT INTO payment (id_patient, actual_payment, created_at)
+      VALUES ($1, $2, $3) RETURNING *;
     `;
-    const values = [id_patient, id_plan, actual_payment, remanent_payment, created_at];
+    const values = [id_patient, actual_payment, created_at];
     
     const result = await pool.query(query, values);
 
@@ -131,7 +131,37 @@ app.post('/add_payment', async (req, res) => {
     res.status(500).json({ error: 'Database insertion error' });
   }
 });
+// ✅ Insert an Appointment
+app.post('/add_appointment', async (req, res) => {
+  const { name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at } = req.body;
 
+  try {
+    console.log('Received Appointment Data:', req.body);
+
+    // ✅ Validate required fields
+    if (!name ||!id_patient || !reason || !date || !time || !type || !priority) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // ✅ Insert into the database
+    const query = `
+      INSERT INTO appointment (name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING *;
+    `;
+    
+    const values = [name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at];
+    
+    const result = await pool.query(query, values);
+
+    console.log('Inserted Appointment:', result.rows[0]);
+    res.status(201).json(result.rows[0]);
+    
+  } catch (err) {
+    console.error('Error inserting appointment:', err.stack);
+    res.status(500).json({ error: 'Database insertion error' });
+  }
+});
 
 // Fetch all treatment plans as JSON
 app.get('/get_patient/:name', async (req, res) => {
@@ -184,7 +214,7 @@ app.get('/get_treatment_plans', async (req, res) => {
   
     try {
       const result = await pool.query(
-        'SELECT id_plan, id_patient, body_part, plan_treatment, created_at, price, updated_at FROM treatment_plan WHERE id_patient = $1',
+        'SELECT id_plan, id_patient, body_part, plan_treatment, created_at, price, updated_at, note FROM treatment_plan WHERE id_patient = $1',
         [id_patient] // Filter by the specific patient ID
       );
   
@@ -198,6 +228,23 @@ app.get('/get_treatment_plans', async (req, res) => {
       res.status(500).json({ error: 'Database fetch error' });
     }
   });
+          // get the sum of all payments for one patient
+  app.get('/get_total_payment/:id_patient', async (req, res) => {
+    const { id_patient } = req.params;
+
+    try {
+        const result = await pool.query(
+            'SELECT COALESCE(SUM(actual_payment), 0) AS total_payment FROM payment WHERE id_patient = $1',
+            [id_patient]
+        );
+
+        res.json({ id_patient, total_payment: result.rows[0].total_payment });
+
+    } catch (err) {
+        console.error('Error fetching total payments:', err.stack);
+        res.status(500).json({ error: 'Database fetch error' });
+    }
+});
 
 // Update a specific patient's details
 app.put('/update_patient/:id', async (req, res) => {

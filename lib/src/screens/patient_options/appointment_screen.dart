@@ -6,6 +6,9 @@ import 'package:app_herbal_flutter/src/components/custom_button.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+import 'package:app_herbal_flutter/src/models/appointment_model.dart';
+
+
 class AppointmentPage extends StatefulWidget {
   const AppointmentPage({super.key});
 @override
@@ -16,7 +19,9 @@ class AppointmentPageState extends State<AppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
+    
+
     final patient = selectedPatientProvider.selectedPatient;
 
     if (patient == null) {
@@ -100,6 +105,46 @@ class AppointmentPageState extends State<AppointmentPage> {
                       ],
                     ),
                   ),
+                    const SizedBox(height: 20),
+                                        // Non-editable Patient Name Container
+                  Container(
+                    width: double.infinity,
+              
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            patient.id,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                    const SizedBox(height: 20),
+                    // Reason Input (Text Field)
+                    CustomInput(
+                      controller: appointmentProvider.reasonController,
+                      keyboardType: TextInputType.text,
+                      labelText: 'Motivo de la Cita',
+                      hintText: 'Escriba el motivo de la cita',
+                      icon: Icons.description,
+                      borderColor: Colors.grey,
+                      iconColor: CustomTheme.lettersColor,
+                      fillColor: CustomTheme.containerColor,
+                    ),
                     const SizedBox(height: 20),
 
                     // Fecha Input (Date Picker)
@@ -196,11 +241,43 @@ class AppointmentPageState extends State<AppointmentPage> {
                         width: 200,
                         text: 'Guardar Datos',
                         color: CustomTheme.buttonColor,
-                        onPressed: () {
-                          
-                          
-                          // Implement API call to save data
-                        },
+                        
+onPressed: () async {
+  final appointment = Appointment(
+    name: patient.name, // Get from selected patient
+    idPatient: patient.id,
+    reason: appointmentProvider.reasonController.text,
+    date: appointmentProvider.dateController.text,
+    time: appointmentProvider.timeController.text,
+    type: appointmentProvider.selectedTipoCita.name,
+    priority: appointmentProvider.selectedPrioridad.name,
+    status: "no atendida", // Default status
+    rescheduleDate: appointmentProvider.reprogramDateController.text.isNotEmpty
+        ? appointmentProvider.reprogramDateController.text
+        : null,
+    rescheduleTime: appointmentProvider.reprogramTimeController.text.isNotEmpty
+        ? appointmentProvider.reprogramTimeController.text
+        : null,
+    createdAt: DateTime.now().toIso8601String(),
+  );
+
+  final result = await appointmentProvider.addAppointment(appointment);
+
+
+  if (!context.mounted) return;
+  if (result['success']) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Appointment Saved Successfully!")),
+    );
+    Navigator.of(context).pop(); // Go back after saving
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: ${result['error']}")),
+    );
+  }
+},
+                          // Show success message or navigate to another screen
+                        
                       ),
                     ),
                     const SizedBox(height: 50),

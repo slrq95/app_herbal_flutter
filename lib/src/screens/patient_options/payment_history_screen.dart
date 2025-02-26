@@ -170,7 +170,7 @@ await Provider.of<PaymentProvider>(context, listen: false).initialize(int.parse(
                                       return Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                                         child: CustomCard(
-                                          height:270,
+                                          height:300,
                                           elevation: 4, // Adds depth to the card
                                           shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(16), // Softer rounded edges

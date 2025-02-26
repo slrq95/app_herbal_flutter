@@ -2,15 +2,58 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:app_herbal_flutter/src/models/appointment_model.dart';
+import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_service.dart';
+import 'package:dio/dio.dart';
 enum Priority { alta, media, baja }
 enum TypeAppointment { consulta, reconsulta, procedimiento }
-enum Status{atendida,noatendida,cancelada}
+enum Status{atendida,noatendida}
+
+  Priority selectedPrioridad = Priority.baja;
+  TypeAppointment selectedTipoCita = TypeAppointment.consulta;
 class AppointmentProvider extends ChangeNotifier {
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController timeController = TextEditingController();
-  final TextEditingController reprogramDateController = TextEditingController();
-  final TextEditingController reprogramTimeController = TextEditingController();
+    final Dio _dio = Dio();
+  final String _baseUrl = "http://localhost:3000"; // Replace with your API URL
+
+  TextEditingController reasonController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
+  TextEditingController timeController = TextEditingController();
+  TextEditingController reprogramDateController = TextEditingController();
+  TextEditingController reprogramTimeController = TextEditingController();
+
+  Priority selectedPrioridad = Priority.baja;
+  TypeAppointment selectedTipoCita = TypeAppointment.consulta;
+
+  Future<Map<String, dynamic>> addAppointment(Appointment appointment) async {
+    try {
+      final response = await _dio.post(
+        "$_baseUrl/add_appointment",
+        data: appointment.toJson(),
+      );
+
+      if (response.statusCode == 201) {
+        return {"success": true};
+      } else {
+        return {"success": false, "error": "Failed to create appointment"};
+      }
+    } catch (e) {
+      return {"success": false, "error": e.toString()};
+    }
+  }
+
+
+  final AppointmentService _appointmentService = AppointmentService();
+    Future<void> saveAppointment(Appointment appointment) async {
+    final response = await _appointmentService.addAppointment(appointment);
+    if (response['success']) {
+      // Handle success (e.g., show a message)
+      debugPrint("Appointment saved successfully!");
+    } else {
+      // Handle error
+      debugPrint("Error: ${response['error']}");
+    }
+  }
+
 
   Future<void> selectDate(BuildContext context, TextEditingController controller) async {
     DateTime? pickedDate = await showDatePicker(
@@ -49,21 +92,18 @@ class AppointmentProvider extends ChangeNotifier {
     notifyListeners();
   }
     // Selected values
-  Priority _selectedPrioridad = Priority.alta;
-  TypeAppointment _selectedTipoCita = TypeAppointment.consulta;
 
-  // Getters
-  Priority get selectedPrioridad => _selectedPrioridad;
-  TypeAppointment get selectedTipoCita => _selectedTipoCita;
+
 
   // Setters
   void setPrioridad(Priority priority) {
-    _selectedPrioridad = priority;
+    selectedPrioridad = priority;
     notifyListeners();
   }
 
   void setTipoCita(TypeAppointment typeAppointment) {
-    _selectedTipoCita = typeAppointment;
+    selectedTipoCita = typeAppointment;
     notifyListeners();
   }
 }
+

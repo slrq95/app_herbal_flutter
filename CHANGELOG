@@ -33,6 +33,8 @@ still remaining implementing code logic relationship between patient,treatment_p
 
 24/02/2025 
 implementing logic a relationship between patient, payment, treatment_plan tables separating Logic from UI and making it works smoothly without affect it if treatment_plans are affected, we relate patient with treatment_plan and patient with payment, so in that case, even if plan change of price of anything, it wont affect logic code that handles payments, and remaining balance.
+25/02/2025 11:23PM
+implementing logic, model, appointment_service, appointment_provider in order to handle insertion to my appointment table using a post method in my backend API, still thinking how would be the best way to handle status(attended, not attended), still thinking if relate patient and appointment tables in order to make fetch data just for name, or inserting name with id_patient in order to avoid resources fetching to table, or relate patient table with appointment table, just for using name in appointment text to display on calendar dashboard
 
 
 
