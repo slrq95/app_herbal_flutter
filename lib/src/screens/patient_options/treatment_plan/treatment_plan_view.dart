@@ -102,8 +102,8 @@ if (viewProvider.treatmentPlans.isEmpty) {
                           ),
                           CustomButton(
                             text: 'Regresar',
-                            width: 100,
-                            height: 40,
+                            width: 120,
+                            height: 50,
                             color: CustomTheme.fillColor,
                             onPressed: () => Navigator.of(context).pushReplacementNamed('/home'),
                           ),
@@ -162,29 +162,29 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                             '💊 Tratamiento: ${treatment['plan_treatment']}',
                                             style: const TextStyle(
                                               color: CustomTheme.lettersColor,
-                                              fontSize: 18,
+                                              fontSize: 22,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
                                           const SizedBox(height: 5),
                                           Text(
                                             '🦴 Parte del cuerpo: ${treatment['body_part']}',
-                                            style: const TextStyle(color: Colors.white, fontSize: 16),
+                                            style: const TextStyle(color: Colors.white, fontSize: 24),
                                           ),
                                           const SizedBox(height: 5),
                                           Text(
                                             'Precio: ${treatment['price']}',
-                                            style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                            style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             '📅 Creado el: ${treatment['created_at']}',
-                                            style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                            style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             '📅 acualizado en : ${treatment['updated_at']}',
-                                            style: const TextStyle(color: Colors.white70, fontSize: 14),
+                                            style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
                                                         
 
@@ -195,10 +195,10 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                               ElevatedButton(
                                                 onPressed: () => showEditDialog(context, treatment),
                                                 style: ElevatedButton.styleFrom(
-                                                  backgroundColor: Colors.blueAccent,
+                                                  backgroundColor: CustomTheme.tertiaryColor,
                                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                                 ),
-                                                child: const Text("Editar", style: TextStyle(fontSize: 16, color: Colors.white)),
+                                                child: const Text("Editar", style: TextStyle(fontSize: 24, color: Colors.white)),
                                                   ),
 
                                                   ],

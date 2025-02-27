@@ -57,8 +57,8 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                       ),
                       CustomButton(
                         text: 'Regresar',
-                        width: 100,
-                        height: 40,
+                        width: 120,
+                        height: 50,
                         color: CustomTheme.fillColor,
                         onPressed: () => Navigator.of(context).pushReplacementNamed('/home'),
                       ),

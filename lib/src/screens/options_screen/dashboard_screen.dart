@@ -16,34 +16,27 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
 @override
-void initState() {
-  super.initState();
-  Future.delayed(Duration.zero, () {
-    if (!mounted) return; // to avoid troubles using Build context with async functions
-
-    final provider = Provider.of<DashboardProvider>(context, listen: false);
-    provider.loadCitasData();
-    provider.loadAbonosData();
-  });
-}
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: CustomTheme.fillColor,
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
+Widget build(BuildContext context) {
+  return SafeArea(
+    child: Scaffold(
+      backgroundColor: CustomTheme.fillColor,
+      body: Center( // Centers the entire column
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 190.0), 
+          // Reduced padding
           child: Consumer<DashboardProvider>(
             builder: (context, provider, child) {
               return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.center, // Centers vertically
                 children: [
                   // First row: Citas (Appointments)
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min, // Reduces width to wrap children
+                    mainAxisAlignment: MainAxisAlignment.center, // Centers horizontally
                     children: [
                       CustomContainer(
-                        height: 250,
+                        height: 450,
+                        width: 350, // Adjusted width
                         child: buildTextNumberContainer(
                           "Total Citas Atendidas",
                           provider.totalAttended,
@@ -51,8 +44,10 @@ void initState() {
                           provider.totalNotAttended,
                         ),
                       ),
+                      const SizedBox(width: 50), // Reduce space between containers
                       CustomContainer(
-                        height: 250,
+                        height: 450,
+                        width: 350, // Adjusted width
                         child: buildGraphAappointmentsContainer(
                           "Historial de citas",
                           provider.totalAttended,
@@ -61,14 +56,16 @@ void initState() {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 50), // Reduce space between rows
 
                   // Second row: Abonos (Payments)
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisSize: MainAxisSize.min, 
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomContainer(
-                        height: 250,
+                        height: 450,
+                        width: 350, 
                         child: buildTextNumberContainer(
                           "Total de abonos",
                           provider.totalPayments,
@@ -76,8 +73,10 @@ void initState() {
                           provider.totalRemaining,
                         ),
                       ),
+                      const SizedBox(width: 50),
                       CustomContainer(
-                        height: 250,
+                        height: 450,
+                        width: 350,
                         child: buildGraphAappointmentsContainer(
                           "Historial de abonos",
                           provider.totalPayments,
@@ -92,7 +91,8 @@ void initState() {
           ),
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
 }

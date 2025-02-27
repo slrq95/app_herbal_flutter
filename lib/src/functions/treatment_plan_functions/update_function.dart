@@ -74,7 +74,7 @@ void showEditDialog(BuildContext context, Map<String, dynamic> treatment) {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text("Cancelar"),
+            child: const Text("Cancelar",style: TextStyle(fontSize: 26)),
           ),
           TextButton(
             onPressed: () async {
@@ -109,7 +109,7 @@ void showEditDialog(BuildContext context, Map<String, dynamic> treatment) {
 
               Navigator.pop(context);
             },
-            child: const Text("Guardar"),
+            child: const Text("Guardar" ,style: TextStyle(fontSize: 26)),
           ),
         ],
       );

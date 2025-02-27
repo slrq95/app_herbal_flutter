@@ -1,4 +1,3 @@
-import 'package:app_herbal_flutter/src/functions/appointment_fuctions/cancel_appointment.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
@@ -66,8 +65,8 @@ class AppointmentPageState extends State<AppointmentPage> {
                           CustomButton(
                             text: 'Regresar',
                             color: CustomTheme.fillColor,
-                            width: 90,
-                            height: 40,
+                            width: 120,
+                            height: 50,
                             style: const TextStyle(fontSize: 18, color: CustomTheme.lettersColor),
                             onPressed: () {
                               Navigator.of(context).pushReplacementNamed('/home');
@@ -263,12 +262,23 @@ onPressed: () async {
 
   final result = await appointmentProvider.addAppointment(appointment);
 
-
   if (!context.mounted) return;
   if (result['success']) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("Appointment Saved Successfully!")),
     );
+
+    // **Clear All Input Fields**
+    appointmentProvider.reasonController.clear();
+    appointmentProvider.dateController.clear();
+    appointmentProvider.timeController.clear();
+    appointmentProvider.reprogramDateController.clear();
+    appointmentProvider.reprogramTimeController.clear();
+    
+    // **Reset Dropdown Selections**
+    appointmentProvider.setPrioridad(Priority.baja); // Set to default priority
+    appointmentProvider.setTipoCita(TypeAppointment.consulta); // Set to default type
+
     Navigator.of(context).pop(); // Go back after saving
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -282,66 +292,8 @@ onPressed: () async {
                     ),
                     const SizedBox(height: 50),
 
-                    // Reprogramar Cita Input (Date Picker)
-                    GestureDetector(
-                      onTap: () => appointmentProvider.selectDate(context, appointmentProvider.reprogramDateController),
-                      child: AbsorbPointer(
-                        child: CustomInput(
-                          controller: appointmentProvider.reprogramDateController,
-                          keyboardType: TextInputType.datetime,
-                          labelText: 'Reprogramar Cita',
-                          hintText: 'Seleccione nueva fecha',
-                          icon: Icons.edit_calendar,
-                          borderColor: Colors.grey,
-                          iconColor: CustomTheme.lettersColor,
-                          fillColor: CustomTheme.containerColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
 
-                    // Reprogramar Hora Input (Time Picker)
-                    GestureDetector(
-                      onTap: () => appointmentProvider.selectTime(context, appointmentProvider.reprogramTimeController),
-                      child: AbsorbPointer(
-                        child: CustomInput(
-                          controller: appointmentProvider.reprogramTimeController,
-                          keyboardType: TextInputType.datetime,
-                          labelText: 'Reprogramar Hora de la Cita',
-                          hintText: 'Seleccione nueva hora',
-                          icon: Icons.access_time,
-                          borderColor: Colors.grey,
-                          iconColor: CustomTheme.lettersColor,
-                          fillColor: CustomTheme.containerColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
 
-                    // Buttons Row
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CustomButton(
-                          height: 60,
-                          width: 140,
-                          text: 'Cancelar Cita',
-                          color: CustomTheme.secondaryColor,
-                          onPressed: () {
-                            showCancelAppointmentConfirmationDialog(context);
-                          },
-                        ),
-                        CustomButton(
-                          height: 60,
-                          width: 140,
-                          text: 'Reprogramar Cita',
-                          color: CustomTheme.primaryColor,
-                          onPressed: () {
-                            appointmentProvider.reprogramDateTime();
-                          },
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               );

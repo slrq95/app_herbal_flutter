@@ -48,7 +48,7 @@ class _PatientPageState extends State<PantientPage> {
                   ),
                   child: TextField(
                     controller: patientProvider.searchController,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white,fontSize: 28),
                     autocorrect: false, // Disables autocorrect
                     enableSuggestions: false, // Disables word suggestions
                     keyboardType: TextInputType.text, 
@@ -97,22 +97,22 @@ class _PatientPageState extends State<PantientPage> {
                               child: ListTile(
                                 title: Text(
                                   patient.name,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: const TextStyle(color: Colors.white, fontSize: 24),
                                 ),
                                 subtitle: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Phone: ${patient.phone}',
-                                      style: const TextStyle(color: Colors.grey),
+                                      'Telefono/celular: ${patient.phone}',
+                                      style: const TextStyle(color: Colors.grey, fontSize: 22),
                                     ),
                                     Text(
-                                      'Birth Date: ${patient.birthDate}',
-                                      style: const TextStyle(color: Colors.grey),
+                                      'Fecha de nacimeitno: ${patient.birthDate}',
+                                      style: const TextStyle(color: Colors.grey,fontSize: 24),
                                     ),
                                     Text(
                                       'ID: ${patient.id}',
-                                      style: const TextStyle(color: Colors.grey),
+                                      style: const TextStyle(color: Colors.grey,fontSize: 24),
                                     ),
                                   ],
                                 ),

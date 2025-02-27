@@ -36,15 +36,17 @@ class PaginaPrincipal extends StatelessWidget {
           child: Column(
             children: [
               Container(
+                
                 margin: const EdgeInsets.only(top: 10.0),
                 padding: const EdgeInsets.only(top: 20.0),
-                height: 80,
+                height: 110,
                 color: CustomTheme.containerColor,
                 child: Row(
                   
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
+                      
                       onPressed: () => signOut(context), // Trigger sign-out
                       icon: Hero(
                         tag: 'signOutIcon',
@@ -54,7 +56,7 @@ class PaginaPrincipal extends StatelessWidget {
                           height: 190.0,
                         ),
                       ),
-                      iconSize: 80.0,
+                      iconSize: 100.0,
                     ),
                   ],
                 ),
@@ -68,26 +70,40 @@ class PaginaPrincipal extends StatelessWidget {
           ),
         ),
         bottomNavigationBar: SizedBox(
-          height: 90.0, // Set height for BottomNavigationBar
-          child: BottomNavigationBar(
-            backgroundColor: CustomTheme.containerColor,
-            selectedItemColor: CustomTheme.lettersColor,
-            unselectedItemColor: Colors.grey,
-            currentIndex: currentIndex,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_sharp),
-                label: 'Dashboard',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person),
-                label: 'Pacientes',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.calendar_month_rounded),
-                label: 'Calendario',
-              ),
-            ],
+          height: 120.0, // Set height for BottomNavigationBar
+     child: BottomNavigationBar(
+  backgroundColor: CustomTheme.containerColor,
+  selectedItemColor: CustomTheme.lettersColor,
+  unselectedItemColor: Colors.grey,
+  currentIndex: currentIndex,
+  items: const <BottomNavigationBarItem>[
+    BottomNavigationBarItem(
+      icon: SizedBox(
+        width: 50, // Adjust width
+        height: 50, // Adjust height
+        child: Icon(Icons.dashboard_sharp, size: 50),
+      ),
+      label: 'Dashboard',
+    ),
+    BottomNavigationBarItem(
+      icon: SizedBox(
+        width: 60,
+        height: 60,
+        child: Icon(Icons.person, size: 60),
+      ),
+      label: 'Pacientes',
+    ),
+    BottomNavigationBarItem(
+      icon: SizedBox(
+        width: 50,
+        height: 50,
+        child: Icon(Icons.calendar_month_rounded, size: 50),
+      ),
+      label: 'Calendario',
+    ),
+  ],
+
+            
             onTap: (int index) {
               provider.updateBottonNavIndex(index);
             },

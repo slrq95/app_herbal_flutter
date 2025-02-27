@@ -1,4 +1,5 @@
 import 'package:app_herbal_flutter/src/api/bottom_nav_index_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_view_provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/clinical_history/clinical_history_provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/dashboard_provider/dashboard_provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
@@ -31,6 +32,7 @@ class Appstate extends StatelessWidget{
         ChangeNotifierProvider(create: (_)=>ClinicalHistoryProvider()),
         ChangeNotifierProvider(create: (_) => TreatmentPlanProvider()), 
         ChangeNotifierProvider(create: (_) => TreatmentViewProvider()),
+        ChangeNotifierProvider(create: (_) => AppointmentViewProvider()),
         //ChangeNotifierProvider(create: (_) => VistaDatosProvider()),
       ],
       child: const MedicalApp(),

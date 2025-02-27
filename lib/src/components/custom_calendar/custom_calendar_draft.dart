@@ -59,7 +59,7 @@ class CustomCalendarDraftState extends State<CustomCalendarDraft> {
             monthColor: Colors.white70,
             dayColor: Colors.white,
             activeDayColor: Colors.white,
-            activeBackgroundDayColor: Colors.blueAccent,
+            activeBackgroundDayColor: CustomTheme.primaryColor,
             //dotsColor: Colors.white70,
             selectableDayPredicate: (date) => true,
           ),

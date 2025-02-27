@@ -163,6 +163,32 @@ app.post('/add_appointment', async (req, res) => {
   }
 });
 
+// ✅ Get Appointments by Date
+app.get('/get_appointment', async (req, res) => {
+  const { date } = req.query;
+
+  try {
+    console.log('Fetching Appointments for Date:', date);
+
+    // ✅ Validate that the date parameter is provided
+    if (!date) {
+      return res.status(400).json({ error: 'Date parameter is required' });
+    }
+
+    // ✅ Query the database for appointments on the given date
+    const query = `SELECT * FROM appointment WHERE date = $1 ORDER BY time ASC`;
+    const result = await pool.query(query, [date]);
+
+    console.log('Fetched Appointments:', result.rows);
+    res.status(200).json(result.rows);
+    
+  } catch (err) {
+    console.error('Error fetching appointments:', err.stack);
+    res.status(500).json({ error: 'Database fetch error' });
+  }
+});
+
+
 // Fetch all treatment plans as JSON
 app.get('/get_patient/:name', async (req, res) => {
   const { name,phone,birth_date } = req.params;
@@ -203,6 +229,8 @@ app.get('/get_clinical_history/:id', async (req, res) => {
         res.status(500).json({ error: 'Database fetch error' });
     }
 });
+
+
 
 // Fetch treatment plans for a specific patient
 app.get('/get_treatment_plans', async (req, res) => {
@@ -304,6 +332,32 @@ app.put('/update_treatment_plan/:id', async (req, res) => {
   } catch (err) {
       console.error('Error updating treatment plan:', err.stack);
       res.status(500).json({ error: 'Database update error' });
+  }
+});
+
+// ✅ PUT route to update appointment status
+app.put('/update_appointment/:id', async (req, res) => {
+  const { id } = req.params; // Get appointment ID from URL
+  const { status } = req.body; // Get new status from request body
+
+  if (!status) {
+    return res.status(400).json({ error: 'Status is required' });
+  }
+
+  try {
+    const result = await pool.query(
+      'UPDATE appointment SET status = $1 WHERE id_appointment = $2 RETURNING *',
+      [status, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: 'Appointment not found' });
+    }
+
+    res.json({ message: 'Appointment updated successfully', appointment: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating appointment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
