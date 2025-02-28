@@ -8,6 +8,7 @@ class PaymentProvider extends ChangeNotifier {
   List<Map<String, dynamic>> treatmentPlans = [];
   final PaymentService _paymentService = PaymentService();
 
+
   /// Initialize the payment provider with patient data
 Future<void> initialize(int patientId) async {
   treatmentPlans.clear();
@@ -33,14 +34,17 @@ Future<void> initialize(int patientId) async {
   }
 
 /// Confirm a payment
-void confirmAbono(double amount) {
-  if (amount <= 0 || amount > abonosPendientes) {
-    debugPrint("Error: Invalid payment amount");
-    return;
-  }
+  /// Confirm a payment with timestamp and note
+  void confirmAbono(double amount, String timestamp) {
+    if (amount <= 0 || amount > abonosPendientes) {
+      debugPrint("Error: Invalid payment amount");
+      return;
+    }
+
   abonosRealizados += amount;
   // Recalculate abonosPendientes correctly
   abonosPendientes = (treatmentPlans.fold(0.0, (sum, plan) => sum + plan["price"])) - totalPayment ;
+  
   notifyListeners();
 }
 

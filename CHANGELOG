@@ -39,4 +39,6 @@ implementing logic, model, appointment_service, appointment_provider in order to
 26/02/2025 8:50PM
 implementing fetch logic, handling id_patient and name as primary key in frontend code logic from appointment table, in order to fetch data from only this table, improving UI/UX of custom buttons, signout button, navigation bar, fontsize in screens, still thinking how to improving UX/UI and icons in buttons, still remaining Reportery, thinking how will be implemented in order to be as simple as possible, still researching about docker common errors and how to properly use as volumes and dumps from backups that will be generated among time, researching more about git and possible common errors, an troubleshooting 
 
+27/02/2025
+Improving UI/UX to show payments with created_at timestamp and notes, thinking how will appointment reportery be handle and how will appointments will definitely be handle as attended or not attended, still researching docker common errors and how to properly use as volumes and dumps from backups that will be generated among time, researching more about git and possible common errors, an troubleshooting 
 

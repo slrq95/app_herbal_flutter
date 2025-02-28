@@ -71,7 +71,7 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 const Text(
-                  'Historia Clínica',
+                  ' Ficha Clínica',
                   style: TextStyle(
                     color: CustomTheme.lettersColor,
                     fontSize: 26,

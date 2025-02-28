@@ -39,20 +39,28 @@ class PaymentService {
     }
     return [];
   }
-
-Future<void> addPayment(int patientId, dynamic actualPayment) async {
+Future<void> addPayment(int patientId, dynamic actualPayment, timestamp, dynamic note) async {
   try {
-    final response = await _dio.post('http://localhost:3000/add_payment', data: {
-      "id_patient": patientId,
-      "actual_payment": actualPayment,
-      "created_at": DateTime.now().toIso8601String(),
-    });
+    final response = await _dio.post(
+      'http://localhost:3000/add_payment',
+      data: {
+        "id_patient": patientId,
+        "actual_payment": actualPayment,
+        "created_at": timestamp,  // Use the passed timestamp
+        "note": note,  // Include the note field
+      },
+    );
 
-    debugPrint('Payment added: ${response.data}');
+    if (response.statusCode == 201) {  // Status 201 means success (created)
+      debugPrint("Payment added successfully!");
+    } else {
+      debugPrint("Failed to add payment: ${response.statusCode}");
+    }
   } catch (e) {
-    debugPrint('Error adding payment: $e');
+    debugPrint("Error adding payment: $e");
   }
 }
+
 
 Future<double> fetchTotalPayment(int idPatient) async {
   try {

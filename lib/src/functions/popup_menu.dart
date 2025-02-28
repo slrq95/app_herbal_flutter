@@ -26,7 +26,7 @@ void showPopupMenu(BuildContext context,Patient patient) { // Accept patient
           children: [
             _buildMenuItem(
               icon: Icons.edit_calendar_rounded,
-              text: "Historial de citas",
+              text: "Programar citas",
               onTap: () {
   final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
   selectedPatientProvider.selectPatient(patient, patient.id);

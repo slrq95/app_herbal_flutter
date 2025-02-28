@@ -104,7 +104,7 @@ app.post('/add_treatment_plan', async (req, res) => {
 
   // ✅ Handle Payment Data - Insert a Payment
 app.post('/add_payment', async (req, res) => {
-  const { id_patient, actual_payment , created_at } = req.body;
+  const { id_patient, actual_payment , created_at, note } = req.body;
 
   try {
     console.log('Received Payment Data:', req.body);
@@ -116,10 +116,10 @@ app.post('/add_payment', async (req, res) => {
 
     // ✅ Insert payment into the database
     const query = `
-      INSERT INTO payment (id_patient, actual_payment, created_at)
-      VALUES ($1, $2, $3) RETURNING *;
+      INSERT INTO payment (id_patient, actual_payment, created_at, note)
+      VALUES ($1, $2, $3, $4) RETURNING *;
     `;
-    const values = [id_patient, actual_payment, created_at];
+    const values = [id_patient, actual_payment, created_at, note];
     
     const result = await pool.query(query, values);
 
@@ -273,6 +273,27 @@ app.get('/get_treatment_plans', async (req, res) => {
         res.status(500).json({ error: 'Database fetch error' });
     }
 });
+// Route: GET /payments/:id_patient
+app.get('/get_payments/:id_patient', async (req, res) => {
+  const { id_patient } = req.params;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM payment WHERE id_patient = $1',
+      [id_patient]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'No payments found for this patient' });
+    }
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 
 // Update a specific patient's details
 app.put('/update_patient/:id', async (req, res) => {

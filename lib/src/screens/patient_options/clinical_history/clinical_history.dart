@@ -80,7 +80,7 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
                 ),
                 SizedBox(
                   width: 120,
-                  height: 45,
+                  height: 50,
                   child: CustomButton(
                     text: 'Regresar',
                     color: CustomTheme.fillColor,

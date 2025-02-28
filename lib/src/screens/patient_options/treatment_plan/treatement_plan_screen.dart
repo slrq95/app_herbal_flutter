@@ -53,7 +53,7 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                     children: [
                       const Text(
                         'Plan de tratamientos',
-                        style: TextStyle(color: CustomTheme.lettersColor, fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: CustomTheme.lettersColor, fontSize: 26, fontWeight: FontWeight.bold),
                       ),
                       CustomButton(
                         text: 'Regresar',
@@ -67,8 +67,10 @@ class TreatmentPlanScreenState extends State<TreatmentPlanScreen> {
                 ),
                 const SizedBox(height: 20),                
                   CustomButton(
+                    borderColor: Colors.amber,
                   text: 'Visualizar Planes de Tratamiento',
                   width: 200,
+                  height: 70,
                   color: CustomTheme.tertiaryColor,
 onPressed: () {
   // Get the selected patient provider
@@ -170,13 +172,15 @@ onPressed: () {
                   fillColor: CustomTheme.containerColor,
                 ),
                 const SizedBox(height: 10),
-CustomButton(
-  color: CustomTheme.primaryColor,
-  text: 'Agregar Plan',
-  onPressed: () {
-    treatmentProvider.addTreatment(patient.id); // Remove await
-  },
-),
+                CustomButton(
+                  height: 70,
+                  borderColor: Colors.green,
+                  color: CustomTheme.primaryColor,
+                  text: 'Agregar Plan',
+                  onPressed: () {
+                    treatmentProvider.addTreatment(patient.id); // Remove await
+                  },
+                ),
                 const SizedBox(height: 20),
 
                 // List of Treatment Cards
@@ -290,6 +294,7 @@ CustomButton(
 
                           // Save Button
 CustomButton(
+  height: 70,
   text: 'Guardar Datos',
   onPressed: () async {
     await treatmentProvider.saveTreatmentPlan();  // Call the method to save the treatment plan

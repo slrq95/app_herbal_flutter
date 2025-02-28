@@ -22,11 +22,22 @@ class PaymentHistory extends StatefulWidget {
 
 class PaymentHistoryState extends State<PaymentHistory> {
   final TextEditingController amountController = TextEditingController();
+  final TextEditingController noteController=TextEditingController();
+
 @override
 void initState() {
   super.initState();
   WidgetsBinding.instance.addPostFrameCallback((_) async {
-await Provider.of<PaymentProvider>(context, listen: false).initialize(int.parse(widget.patientId));
+    final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
+    
+    await paymentProvider.initialize(int.parse(widget.patientId));
+
+    Future.delayed(const Duration(seconds: 1), () {
+      if (paymentProvider.treatmentPlans.isEmpty && mounted) {    
+        Navigator.pushReplacementNamed(context, '/home');
+
+      }
+    });
   });
 }
   @override
@@ -52,26 +63,11 @@ await Provider.of<PaymentProvider>(context, listen: false).initialize(int.parse(
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Consumer<PaymentProvider>(
+            
             builder: (context, paymentProvider, child) {
+                final patientTreatmentPlans = paymentProvider.getPatientTreatmentPlans(int.parse(patient.id));
               
-                            // You can check if data is still being fetched
-              if (paymentProvider.treatmentPlans.isEmpty) {
-                return FutureBuilder(
-                  future: Future.delayed(const Duration(seconds: 2)),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      // After the 2 seconds delay, check the treatment plans
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamed(context, '/home');
-                      });
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                );
-              }
-              
-              final patientTreatmentPlans = paymentProvider.getPatientTreatmentPlans(int.parse(patient.id));
+
               debugPrint("Treatment Plans: $patientTreatmentPlans");
               return SingleChildScrollView(
                 child: Column(
@@ -89,13 +85,13 @@ await Provider.of<PaymentProvider>(context, listen: false).initialize(int.parse(
                       children: [
                         const Text(
                           'Historial de Pagos',
-                          style: TextStyle(color: CustomTheme.lettersColor, fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: CustomTheme.lettersColor, fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         CustomButton(
                           
                           text: 'Regresar',
-                          width: 100,
-                          height: 40,
+                          width: 120,
+                          height: 50,
                           color: CustomTheme.fillColor,
                           onPressed: () => Navigator.of(context).pushReplacementNamed('/home'),
                         ),
@@ -208,13 +204,46 @@ await Provider.of<PaymentProvider>(context, listen: false).initialize(int.parse(
                         hintText: 'Ingrese el monto',
                         icon: Icons.money,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 10),
+                                            CustomInput(
+            
+                        fillColor: CustomTheme.containerColor,
+                        iconColor: CustomTheme.buttonColor,
+                        borderColor: CustomTheme.buttonColor,
+                        controller: noteController,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        labelText: 'Forma de pago',
+                        hintText: 'Efectivo/Tarjeta/Transferencia',
+                        icon: Icons.money,
+                      ),
+                      const SizedBox(height: 10),
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          CustomButton(text: 'Confirmar Pago', width: 130, height: 70, color: CustomTheme.primaryColor ,onPressed: () => onConfirmButtonPressed(context,amountController)),
-                          CustomButton(text: 'Cancelar Pago', width: 130, height: 70, color: CustomTheme.secondaryColor, onPressed: () => showCancelConfirmationDialog(context)),
+                      CustomButton(
+                        borderColor: Colors.amber,
+                        text: 'Pagos Realizados',
+                        width: 180,
+                        height: 70,
+                        color: CustomTheme.tertiaryColor,
+                        onPressed: () {
+                            Navigator.pushNamed(context, '/PaymentViewScreen');
+                          } 
+                      ),
+
+                          CustomButton(text: 'Confirmar Pago',
+                          borderColor: Colors.green,
+                            width: 180,
+                            height: 70, 
+                            color: CustomTheme.primaryColor,
+                            onPressed: () => onConfirmButtonPressed(context,amountController,)),
+                          CustomButton(text: 'Cancelar Pago',
+                          borderColor: Colors.red,
+                            width: 180,
+                            height: 70, 
+                            color: CustomTheme.secondaryColor, 
+                            onPressed: () => showCancelConfirmationDialog(context)),
                         ],
                       ),
                   const SizedBox(height: 30),
@@ -313,17 +342,22 @@ CustomButton(
 
     final actualPayment = paymentProvider.abonosRealizados; // Total payment value
 
+    String note = noteController.text.trim();
+
     try {
       // ✅ Send data **only once** for the patient
-      await PaymentService().addPayment(
-        int.parse(patient.id),
-        actualPayment,
-      );
+ await PaymentService().addPayment(
+  int.parse(patient.id),
+  actualPayment,
+  DateTime.now().toIso8601String(), // Current timestamp
+  note, // Example note, replace with actual input if needed
+);
 
       debugPrint("Payment sent successfully for Patient ID: ${patient.id}");
 
       // Clear the input field and reset the provider state
       amountController.clear();
+      noteController.clear();
       paymentProvider.resetCurrentPayment(); // Reset payment value
 
       // Fetch updated treatment plans and total payment

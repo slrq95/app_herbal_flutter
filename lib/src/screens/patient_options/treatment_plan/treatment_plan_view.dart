@@ -178,12 +178,12 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
-                                            '📅 Creado el: ${treatment['created_at']}',
+                                            '📅 Creado el: ${DateTime.parse(treatment['created_at']).toLocal()}',
                                             style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
-                                            '📅 acualizado en : ${treatment['updated_at']}',
+                                            '📅 acualizado en : ${DateTime.parse(treatment['updated_at']).toLocal()}',
                                             style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
                                                         

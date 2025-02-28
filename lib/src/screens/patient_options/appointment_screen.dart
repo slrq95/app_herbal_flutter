@@ -45,7 +45,7 @@ class AppointmentPageState extends State<AppointmentPage> {
                   children: [
                     // Custom Header Instead of AppBar
                     Container(
-                      height: 80,
+                      height: 100,
                       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
                       decoration: BoxDecoration(
                         color: CustomTheme.containerColor,
@@ -67,7 +67,7 @@ class AppointmentPageState extends State<AppointmentPage> {
                             color: CustomTheme.fillColor,
                             width: 120,
                             height: 50,
-                            style: const TextStyle(fontSize: 18, color: CustomTheme.lettersColor),
+                            style: const TextStyle(fontSize: 20, color: CustomTheme.lettersColor),
                             onPressed: () {
                               Navigator.of(context).pushReplacementNamed('/home');
                             },
@@ -216,7 +216,7 @@ class AppointmentPageState extends State<AppointmentPage> {
                         labelStyle: const TextStyle(color: CustomTheme.lettersColor),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
                         filled: true,
-                        fillColor: const Color(0xFF1E1E1E),
+                        fillColor: CustomTheme.fillColor,
                       ),
                       items: TypeAppointment.values.map((TypeAppointment value) {
                         return DropdownMenuItem<TypeAppointment>(
@@ -265,9 +265,12 @@ onPressed: () async {
   if (!context.mounted) return;
   if (result['success']) {
     ScaffoldMessenger.of(context).showSnackBar(
+      
+    
       const SnackBar(content: Text("Appointment Saved Successfully!")),
+      
     );
-
+    
     // **Clear All Input Fields**
     appointmentProvider.reasonController.clear();
     appointmentProvider.dateController.clear();

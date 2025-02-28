@@ -96,7 +96,7 @@ class _PatientPageState extends State<PantientPage> {
                             child: CustomCard(
                               child: ListTile(
                                 title: Text(
-                                  patient.name,
+                                  'Nombre: ${patient.name}',
                                   style: const TextStyle(color: Colors.white, fontSize: 24),
                                 ),
                                 subtitle: Column(
@@ -107,7 +107,7 @@ class _PatientPageState extends State<PantientPage> {
                                       style: const TextStyle(color: Colors.grey, fontSize: 22),
                                     ),
                                     Text(
-                                      'Fecha de nacimeitno: ${patient.birthDate}',
+                                      'Fecha de nacimiento: ${patient.birthDate}',
                                       style: const TextStyle(color: Colors.grey,fontSize: 24),
                                     ),
                                     Text(

@@ -10,6 +10,7 @@ import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_s
 import 'package:app_herbal_flutter/src/screens/patient_options/clinical_history/clinical_history.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/treatment_plan/treatement_plan_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/treatment_plan/treatment_plan_view.dart';
+import 'package:app_herbal_flutter/src/screens/payment_view_screen.dart';
 import 'package:app_herbal_flutter/src/screens/splash_page.dart';
 import 'package:app_herbal_flutter/src/screens/options_screen/patient_screen.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,8 @@ case '/TreatmentPlanView':
   return MaterialPageRoute(
     builder: (_) => TreatmentPlanView(patientId: patientId),
   );
+case'/PaymentViewScreen':
+    return MaterialPageRoute(builder: (_) =>  const PaymentViewScreen());
 
   default:
     _errorRoute();
