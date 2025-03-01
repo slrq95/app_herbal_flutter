@@ -382,6 +382,34 @@ app.put('/update_appointment/:id', async (req, res) => {
   }
 });
 
+app.put('/reschedule_appointment/:id', async (req, res) => {
+  const { id } = req.params; // Get appointment ID from URL
+  const { date, time } = req.body; // Get new date and time from request body
+
+  if (!date || !time) {
+    return res.status(400).json({ error: "Date and time are required." });
+  }
+
+  try {
+    const result = await pool.query(
+      `UPDATE appointment 
+       SET date = $1, time = $2 
+       WHERE id_appointment = $3 
+       RETURNING *`,
+      [date, time, id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Appointment not found." });
+    }
+
+    res.json({ message: "Appointment rescheduled successfully.", appointment: result.rows[0] });
+  } catch (error) {
+    console.error("Error rescheduling appointment:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 // Start the Express server
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');

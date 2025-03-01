@@ -27,5 +27,15 @@ class AppointmentViewService {
       throw Exception('Error updating appointment status: $e');
     }
   }
+  Future<void> rescheduleAppointment(int appointmentId, String date, String time) async {
+  try {
+    await _dio.put(
+      '/reschedule_appointment/$appointmentId',
+      data: {'date': date, 'time': time},
+    );
+  } catch (e) {
+    throw Exception('Error rescheduling appointment: $e');
+  }
+}
   
 }

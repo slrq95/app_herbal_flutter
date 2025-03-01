@@ -16,8 +16,11 @@ class PaymentViewScreen extends StatefulWidget {
 class PaymentViewScreenState extends State<PaymentViewScreen> {
   @override
   void initState() {
+    
     super.initState();
+    
     Future.microtask(() {
+      
       final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
       final paymentProvider = Provider.of<ViewPaymentProvider>(context, listen: false);
 

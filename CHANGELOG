@@ -42,3 +42,6 @@ implementing fetch logic, handling id_patient and name as primary key in fronten
 27/02/2025
 Improving UI/UX to show payments with created_at timestamp and notes, thinking how will appointment reportery be handle and how will appointments will definitely be handle as attended or not attended, still researching docker common errors and how to properly use as volumes and dumps from backups that will be generated among time, researching more about git and possible common errors, an troubleshooting 
 
+28/02/2025 11:41PM 
+Handling appointment reschedule without affecting logic, fetching data or relationships between tables, removing cards when appointment is changed and inmedialty UI refresh, when user mark as attended or not attended data can´t be updated anymore, user can mark only once, after mark, appointment won't change status, still researching and learning about docker and git troubleshooting and common errors
+
