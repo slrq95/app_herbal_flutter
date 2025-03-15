@@ -250,13 +250,7 @@ onPressed: () async {
     time: appointmentProvider.timeController.text,
     type: appointmentProvider.selectedTipoCita.name,
     priority: appointmentProvider.selectedPrioridad.name,
-    status: "no atendida", // Default status
-    rescheduleDate: appointmentProvider.reprogramDateController.text.isNotEmpty
-        ? appointmentProvider.reprogramDateController.text
-        : null,
-    rescheduleTime: appointmentProvider.reprogramTimeController.text.isNotEmpty
-        ? appointmentProvider.reprogramTimeController.text
-        : null,
+    status: "no_atendida", // Default status
     createdAt: DateTime.now().toIso8601String(),
   );
 

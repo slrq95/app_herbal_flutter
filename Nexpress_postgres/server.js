@@ -9,12 +9,13 @@ app.use(cors());
 app.use(bodyParser.json()); // Middleware to parse JSON data
 
 // Database connection configuration
+require('dotenv').config();
 const pool = new Pool({
-  user: 'leonel',
-  host: 'localhost',
-  database: 'app_herbal',  // Ensure this is the correct database name
-  password: 'leonel',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
 // Test database connection
@@ -133,7 +134,7 @@ app.post('/add_payment', async (req, res) => {
 });
 // ✅ Insert an Appointment
 app.post('/add_appointment', async (req, res) => {
-  const { name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at } = req.body;
+  const { name, id_patient, reason, date, time, type, priority, status, created_at } = req.body;
 
   try {
     console.log('Received Appointment Data:', req.body);
@@ -145,12 +146,12 @@ app.post('/add_appointment', async (req, res) => {
 
     // ✅ Insert into the database
     const query = `
-      INSERT INTO appointment (name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      INSERT INTO appointment (name, id_patient, reason, date, time, type, priority, status, created_at)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *;
     `;
     
-    const values = [name, id_patient, reason, date, time, type, priority, status, reschedule_date, reschedule_time, created_at];
+    const values = [name, id_patient, reason, date, time, type, priority, status, created_at];
     
     const result = await pool.query(query, values);
 
@@ -163,6 +164,27 @@ app.post('/add_appointment', async (req, res) => {
   }
 });
 
+// POST: Insert a new laboratory record
+app.post("/add_laboratory", async (req, res) => {
+  try {
+    const { id_patient, laboratorist, piece, cost, created_at } = req.body; // Ensure 'piece' is included
+
+    const result = await pool.query(
+      "INSERT INTO laboratory (id_patient, laboratorist, piece, cost, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [id_patient, laboratorist, piece, cost, created_at]
+    );
+
+    console.log("Inserted Record:", result.rows[0]); // Log inserted record
+
+    res.status(201).json({
+      message: "Laboratory record inserted successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error inserting laboratory record:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 // ✅ Get Appointments by Date
 app.get('/get_appointment', async (req, res) => {
   const { date } = req.query;
@@ -209,6 +231,9 @@ app.get('/get_patient/:name', async (req, res) => {
       res.status(500).json({ error: 'Database fetch error' });
   }
 });
+
+
+
 // fetching clinical history data
 app.get('/get_clinical_history/:id', async (req, res) => {
     const { id } = req.params;
@@ -229,6 +254,28 @@ app.get('/get_clinical_history/:id', async (req, res) => {
         res.status(500).json({ error: 'Database fetch error' });
     }
 });
+
+// fetching laboratory data 
+app.get('/get_laboratory/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const result = await pool.query(
+          'SELECT * FROM laboratory WHERE id_patient = $1',
+          [id]
+      );
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'No clinical history found' });
+      }
+
+      res.json(result.rows);
+  } catch (err) {
+      console.error('Error fetching clinical history:', err);
+      res.status(500).json({ error: 'Database fetch error' });
+  }
+});
+
 
 
 
@@ -321,6 +368,40 @@ app.put('/update_patient/:id', async (req, res) => {
     }
 });
 
+
+app.put('/update_clinical_history/:id', async (req, res) => {
+  const { id } = req.params;
+  const { clinical_history, patient_characteristics, consult_reason } = req.body;
+
+  try {
+      if (!clinical_history || !patient_characteristics || !consult_reason) {
+          return res.status(400).json({ error: 'Missing required fields' });
+      }
+
+      const query = `
+          UPDATE clinical_history 
+          SET clinical_history = $1, patient_characteristics = $2, consult_reason = $3, updated_at = NOW()
+          WHERE id_patient = $4
+          RETURNING *;
+      `;
+
+      const values = [clinical_history, patient_characteristics, consult_reason, id];
+
+      const result = await pool.query(query, values);
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Clinical history not found' });
+      }
+
+      console.log('Updated clinical history:', result.rows[0]);
+      res.status(200).json(result.rows[0]);
+
+  } catch (err) {
+      console.error('Error updating clinical history:', err.stack);
+      res.status(500).json({ error: 'Database update error' });
+  }
+});
+
 app.put('/update_treatment_plan/:id', async (req, res) => {
   const { id } = req.params; // Get plan ID from URL params
   const { plan_treatment, body_part, price, note } = req.body; // Get updated values from request body
@@ -409,6 +490,117 @@ app.put('/reschedule_appointment/:id', async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 });
+
+// reportery for attended and not attended appointments
+app.get("/get_appointment_stats", async (req, res) => {
+  try {
+    const query = `
+      SELECT status, COUNT(*) AS count
+      FROM appointment
+      GROUP BY status;
+    `;
+
+    const result = await pool.query(query);
+
+    // Convert result to a structured JSON response
+    const stats = { atendida: 0, no_atendida: 0 };
+    result.rows.forEach(row => {
+      stats[row.status] = parseInt(row.count, 10);
+    });
+
+    res.json(stats);
+  } catch (error) {
+    console.error("Error fetching appointment stats:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Reportery appointments, fetching data by date range
+app.get("/get_appointment_stats_by_date", async (req, res) => {
+  try {
+    const { startDate, endDate } = req.query;
+
+    // Validate required parameters
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: "startDate and endDate are required" });
+    }
+
+    const query = `
+      SELECT status, COUNT(*) AS count
+      FROM appointment
+      WHERE date BETWEEN $1 AND $2
+      GROUP BY status;
+    `;
+
+    const result = await pool.query(query, [startDate, endDate]);
+
+    // Convert result to a structured JSON response
+    const stats = { atendida: 0, no_atendida: 0 };
+    result.rows.forEach(row => {
+      stats[row.status] = parseInt(row.count, 10);
+    });
+
+    res.json(stats);
+  } catch (error) {
+    console.error("Error fetching appointment stats:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+
+});
+
+  // Reportery payments
+
+  app.get("/get_payments_by_date", async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+      const fixedEndDate = endDate + ' 23:59:59';
+      const fixedStartDate = startDate 
+      // Validate required parameters
+      if (!startDate || !endDate) {
+        return res.status(400).json({ error: "startDate and endDate are required" });
+      }
+  
+      const query = `
+        SELECT COALESCE(SUM(actual_payment), 0) AS total_payments
+        FROM payment
+        WHERE created_at BETWEEN $1 AND $2;
+      `;
+  
+      const result = await pool.query(query, [startDate, fixedEndDate]);
+  
+      // Return the sum of payments as a single value
+      res.json({ totalPayments: result.rows[0].total_payments });
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+
+  app.get("/get_treatment_prices_by_date", async (req, res) => {
+    try {
+      const { startDate, endDate } = req.query;
+      const fixedEndDate = endDate + ' 23:59:59';
+      // Validate required parameters
+      if (!startDate || !endDate) {
+        return res.status(400).json({ error: "startDate and endDate are required" });
+      }
+  
+      const query = `
+        SELECT COALESCE(SUM(price), 0) AS total_prices
+        FROM treatment_plan
+        WHERE created_at BETWEEN $1 AND $2;
+      `;
+  
+      const result = await pool.query(query, [startDate, fixedEndDate]);
+  
+      // Return the sum of prices as a single value
+      res.json({ totalPrices: result.rows[0].total_prices });
+    } catch (error) {
+      console.error("Error fetching treatment prices:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  
 
 // Start the Express server
 app.listen(3000, () => {

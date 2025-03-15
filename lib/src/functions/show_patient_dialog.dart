@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:app_herbal_flutter/src/tools/show_error.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:app_herbal_flutter/src/components/custom_input.dart';
@@ -9,7 +12,6 @@ final TextEditingController birthDateController = TextEditingController();
 
 void showPatientDialog(BuildContext context) {
   String timestamp = DateTime.now().toLocal().toString();
-
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -67,81 +69,138 @@ void showPatientDialog(BuildContext context) {
           child: const Text('Cancelar', style: TextStyle(color: CustomTheme.secondaryColor, fontSize: 28)),
         ),
         TextButton(
-onPressed: () async {
-  Map<String, dynamic> patientData = {
-    'name': nameController.text,
-    'phone': phoneController.text,
-    'birth_date': birthDateController.text,
-    'created_at': timestamp,
-  };
+          onPressed: () async {
+            String name = nameController.text.trim();
+            String phone = phoneController.text.trim();
+            String birthDate = birthDateController.text.trim();
 
-  try {
-    final response = await DioService().postPatient(patientData);
-    if (!context.mounted) return;
-    if (response?.statusCode == 201) {
-      Navigator.pop(context);
-      showMessage(context, 'Paciente agregado exitosamente');
-      // Clear the text fields after successful save
-      nameController.clear();
-      phoneController.clear();
-      birthDateController.clear();
-    }
-  } catch (e) {
-    if (e is DioException) {
-      String errorMessage = 'Error al agregar el paciente';
+            // Name validation: Only letters and spaces allowed
+            RegExp namePattern = RegExp(r"^[a-zA-ZÀ-ÿ\s]+$");
+            if (name.isEmpty || !namePattern.hasMatch(name)) {
+              showErrorDialog(context, 'Nombre Invalido. Solo letras y espacios estan permitidos.');
+                  // Phone validation: Only numbers and spaces allowed
+          
+              return;
+            }
 
-      if (e.response != null && e.response!.data != null) {
-        final data = e.response!.data;
+            RegExp phonePattern = RegExp(r"^[0-9\s]+$");
+            if (phone.isEmpty || !phonePattern.hasMatch(phone)) {
+              showErrorDialog(context, 'Número de teléfono inválido. Solo números y espacios están permitidos.');
+              return;
+            }
+            // Regex to validate date format YYYY-MM-DD
+            RegExp datePattern = RegExp(r'^\d{4}-\d{2}-\d{2}$');
+            if (!datePattern.hasMatch(birthDate)) {
+              showErrorDialog(context, 'Formato invalido. Debe de usar AÑO-Mes-Dia');
+              return;
+            }
 
-        if (data is Map<String, dynamic> && data.containsKey('error')) {
-          errorMessage = data['error']; // Extract the backend error message
+            try {
+              List<String> parts = birthDate.split("-");
+              int year = int.parse(parts[0]);
+              int month = int.parse(parts[1]);
+              int day = int.parse(parts[2]);
+
+              if (year < 1900) {
+                showErrorDialog(context, "La fecha de nacimiento no puede ser antes de 1900.");
+                return;
+              }
+
+              if (month < 1 || month > 12) {
+                showErrorDialog(context, "Mes invalido. Debe de estar entre 1 y 12.");
+                return;
+              }
+
+              int maxDays = DateTime(year, month + 1, 0).day;
+              if (day < 1 || day > maxDays) {
+                showErrorDialog(context, "Dia invalido. el mes $month tiene solo $maxDays dias.");
+                return;
+              }
+
+              Map<String, dynamic> patientData = {
+                'name': name,
+                'phone': phone,
+                'birth_date': birthDate,
+                'created_at': timestamp,
+              };
+
+              final response = await DioService().postPatient(patientData);
+
+              if (!context.mounted) return;
+
+              if (response?.statusCode == 201) {
+                Navigator.pop(context);
+                showErrorDialog(context, 'Paciente agregado exitosamente');
+                nameController.clear();
+                phoneController.clear();
+                birthDateController.clear();
+              }
+            }
+            
+        catch (e, stackTrace) { // Capture stack trace for debugging
+          debugPrint("🚨 CATCH BLOCK TRIGGERED 🚨");
+          debugPrint("Error Type: ${e.runtimeType}"); // Print actual type of exception
+          debugPrint("Stack Trace: $stackTrace");
+
+          String errorMessage = 'Error al agregar el paciente';
+
+          if (e is DioException) { // Ensure it’s catching DioException
+            debugPrint("✅ DioException caught!");
+            debugPrint("Type: ${e.type}");
+            debugPrint("Message: ${e.message}");
+            debugPrint("Response Status Code: ${e.response?.statusCode}");
+            debugPrint("Full Response: ${e.response}");
+            debugPrint("Response Data: ${e.response?.data}");
+            debugPrint("Response Data Type: ${e.response?.data.runtimeType}");
+
+            if (e.response != null) {
+              final data = e.response!.data;
+
+              // CASE 1: If the response is already a Map, extract the error message
+              if (data is Map<String, dynamic>) {
+                errorMessage = data['error'] ?? 'Unknown error occurred.';
+              }
+              // CASE 2: If the response is a String, attempt to parse it
+              else if (data is String) {
+                try {
+                  final parsedData = jsonDecode(data);
+                  if (parsedData is Map<String, dynamic> && parsedData.containsKey('error')) {
+                    errorMessage = parsedData['error'];
+                  } else {
+                    errorMessage = data; // Use raw message if JSON parsing fails
+                  }
+                } catch (_) {
+                  errorMessage = data; // Use raw message if parsing fails
+                }
+              }
+              // CASE 3: Unexpected response format
+              else {
+                errorMessage = 'Unknown error format: ${data.toString()}';
+              }
+            } else {
+              errorMessage = 'No response from server.';
+            }
+          } else {
+            debugPrint("🚨 Unexpected error: $e");
+            errorMessage = "Unexpected error occurred: $e";
+          }
+
+          if (!context.mounted) return;
+
+          Future.delayed(Duration(milliseconds: 100), () {
+          if (context.mounted) {
+            debugPrint("Showing Error Dialog: $errorMessage"); // Debug log
+            showErrorDialog(context, errorMessage); // Ensure this is executed
+          }
+          });
         }
-      }
-      if (!context.mounted) return;
-      showMessage(context, errorMessage);
-    } else {
-      if (!context.mounted) return;
-      showMessage(context, 'Error desconocido');
-    }
-  }
-},
-
-
-          child: const Text('Guardar', style: TextStyle(color: CustomTheme.primaryColor, fontSize: 28)),
+          },
+          child: const Text(
+            'Guardar',
+            style: TextStyle(color: CustomTheme.primaryColor, fontSize: 28),
+          ),
         ),
       ],
     ),
   );
-}
-
-/// ✅ Function to show an alert dialog
-void showMessage(BuildContext context, String message) {
-  Future.delayed(Duration.zero, () {
-    if (!context.mounted) return;
-    showDialog(
-      
-      context: context,
-      barrierDismissible: false, // Prevent accidental dismiss
-      builder: (BuildContext dialogContext) {
-        return AlertDialog(
-          backgroundColor: CustomTheme.containerColor,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          title: const Text(
-            'Información',
-            style: TextStyle(color: CustomTheme.lettersColor, fontSize: 24),
-          ),
-          content: Text(
-            message,
-            style: const TextStyle(color: CustomTheme.lettersColor, fontSize: 20),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
-              child: const Text('OK', style: TextStyle(color: CustomTheme.primaryColor, fontSize: 24)),
-            ),
-          ],
-        );
-      },
-    );
-  });
 }

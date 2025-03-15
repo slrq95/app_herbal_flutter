@@ -36,5 +36,17 @@ class DioService {
       return null;
     }
   }
+
+    // PUT method for updating clinical history
+  Future<Response?> putClinicalHistory(int patientId, Map<String, dynamic> data) async {
+    try {
+      return await _dio.put('/update_clinical_history/$patientId', data: data);
+    } catch (e) {
+      print("Error updating clinical history: $e");
+      return null;
+    }
+  }
 }
+
+
 

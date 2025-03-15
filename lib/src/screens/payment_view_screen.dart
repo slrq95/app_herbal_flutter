@@ -116,12 +116,12 @@ class PaymentViewScreenState extends State<PaymentViewScreen> {
                                   style: const TextStyle(fontSize: 26, color: Colors.white),
                                 ),
                                 const SizedBox(height: 8),
-Text(
-  "Fecha del pago: ${DateTime.parse(payment['created_at']).toLocal()}",
-  style: const TextStyle(fontSize: 16, color: Colors.white),
-),
                                 Text(
-                                  "Nota: ${payment['note']}",
+                                  "Fecha del pago: ${DateTime.parse(payment['created_at']).toLocal()}",
+                                  style: const TextStyle(fontSize: 16, color: Colors.white),
+                                ),
+                                Text(
+                                  "Forma de pago: ${payment['note']}",
                                   style: const TextStyle(fontSize: 16, color: Colors.white),
                                 ),
                               ],

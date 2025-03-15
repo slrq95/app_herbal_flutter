@@ -39,7 +39,7 @@ class ClinicalHistoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> createClinicalHistory(dynamic patientId) async {
+  Future<bool> createClinicalHistory( int patientId) async {
     final success = await ClinicalHistoryService.createClinicalHistory(
       patientId,
       clinicalHistoryController.text,
@@ -54,6 +54,28 @@ class ClinicalHistoryProvider extends ChangeNotifier {
     return success;
   }
 
+  Future<bool> updateClinicalHistory(int patientId) async {
+    isLoading = true;
+    notifyListeners();
+
+    final success = await ClinicalHistoryService.updateClinicalHistory(
+      patientId,
+      clinicalHistoryController.text,
+      patientCharacteristicsController.text,
+      consultReasonController.text,
+    );
+
+    if (success) {
+      debugPrint("Clinical history updated successfully");
+      isDataFetched = true;
+    } else {
+      debugPrint("Failed to update clinical history");
+    }
+
+    isLoading = false;
+    notifyListeners();
+    return success;
+  }
   @override
   void dispose() {
     clinicalHistoryController.dispose();

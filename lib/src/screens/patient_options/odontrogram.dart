@@ -1,3 +1,4 @@
+import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 
 class OdotogramScreen extends StatefulWidget {
@@ -9,12 +10,13 @@ class OdotogramScreen extends StatefulWidget {
 
 class OdotogramScreenState extends State<OdotogramScreen> {
   List<Offset> points = [];
-  final GlobalKey _imageKey = GlobalKey(); // Track image position
+  final GlobalKey _imageKey = GlobalKey();
+  TextEditingController topNotesController = TextEditingController();
+  TextEditingController bottomNotesController = TextEditingController();
 
   void _addPoint(DragUpdateDetails details) {
     final RenderBox? renderBox = _imageKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox != null) {
-      // Convert touch coordinates to the image's local space
       Offset localOffset = renderBox.globalToLocal(details.globalPosition);
       setState(() {
         points.add(localOffset);
@@ -23,46 +25,95 @@ class OdotogramScreenState extends State<OdotogramScreen> {
   }
 
   @override
+  void dispose() {
+    topNotesController.dispose();
+    bottomNotesController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Odontograma')),
-      body: GestureDetector(
-        onPanUpdate: _addPoint,
-        onPanEnd: (details) => points.add(Offset.infinite),
-        child: Center(
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: InteractiveViewer(
-                  minScale: 1.0,
-                  maxScale: 3.0,
-                  child: Center(
-                    child: Image.asset(
-                      'lib/src/assets/images/odontograma.jpg',
-                      key: _imageKey,
-                      fit: BoxFit.contain, // Ensures the full image fits on the screen
-                      width: double.infinity, // Ensures full width usage
-                      height: double.infinity, // Ensures full height usage
+      backgroundColor: CustomTheme.fillColor, // Dark background
+      appBar: AppBar(
+        title: const Text('Odontograma'),
+        backgroundColor: Colors.white, // Match text fields
+      ),
+      body: Column(
+        children: [
+          _buildNotesField(topNotesController, 'Apuntes (Parte superior)'),
+          Expanded(
+            child: GestureDetector(
+              onPanUpdate: _addPoint,
+              onPanEnd: (details) => points.add(Offset.infinite),
+              child: Center(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: InteractiveViewer(
+                        minScale: 1.0,
+                        maxScale: 3.0,
+                        child: Center(
+                          child: Image.asset(
+                            'lib/src/assets/images/odontograma.jpg',
+                            key: _imageKey,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                    Positioned.fill(
+                      child: CustomPaint(painter: OdotogramPainter(points)),
+                    ),
+                  ],
                 ),
               ),
-              Positioned.fill(
-                child: CustomPaint(
-                  painter: OdotogramPainter(points),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          _buildNotesField(bottomNotesController, 'Apuntes (Parte inferior)'),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
         onPressed: () {
           setState(() {
             points.clear();
+            topNotesController.clear();
+            bottomNotesController.clear();
           });
         },
-        child: const Icon(Icons.refresh),
+        child: const Icon(Icons.refresh, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildNotesField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        style: const TextStyle(fontSize: 22.0, color: Colors.white), // White text
+        controller: controller,
+        maxLines: 8,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white70),
+          filled: true,
+          fillColor: const Color(0xFF1E1E1E), // Dark input background
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.white30),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.white30),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.purple),
+          ),
+        ),
       ),
     );
   }
@@ -76,9 +127,9 @@ class OdotogramPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = const Color.fromARGB(255, 210, 61, 236)
+      ..color = Colors.purple
       ..strokeWidth = 8.0
-      ..strokeCap = StrokeCap.square;
+      ..strokeCap = StrokeCap.round;
 
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != Offset.infinite && points[i + 1] != Offset.infinite) {
@@ -86,7 +137,6 @@ class OdotogramPainter extends CustomPainter {
       }
     }
 
-    // Draw purple dots at each point
     Paint dotPaint = Paint()..color = Colors.purple;
     for (Offset point in points) {
       if (point != Offset.infinite) {

@@ -190,7 +190,7 @@ void _updateAppointmentStatus(int appointmentId, String status, AppointmentViewP
                                       borderRadius: 60.0,
                                       borderColor: Colors.green,
                                       borderWidth: 6.0,
-                                      text: "no atendida",
+                                      text: "Atendida",
                                       color: CustomTheme.primaryColor,
                                       width: 200,
                                       height: 50,
@@ -245,7 +245,7 @@ void _updateAppointmentStatus(int appointmentId, String status, AppointmentViewP
                                                 TextButton(
                                                   onPressed: () {
                                                     Navigator.of(context).pop();
-                                                    _updateAppointmentStatus(appointmentId, "no atendida", provider);
+                                                    _updateAppointmentStatus(appointmentId, "no_atendida", provider);
                                                   },
                                                   child: const Text("Confirmar"),
                                                 ),

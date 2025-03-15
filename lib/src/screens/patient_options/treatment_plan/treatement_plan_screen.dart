@@ -1,4 +1,5 @@
 import 'package:app_herbal_flutter/src/functions/treatment_plan_functions/show_cancel.dart';
+import 'package:app_herbal_flutter/src/tools/show_error.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:app_herbal_flutter/src/components/custom_button.dart';
@@ -178,9 +179,38 @@ onPressed: () {
                   color: CustomTheme.primaryColor,
                   text: 'Agregar Plan',
                   onPressed: () {
-                    treatmentProvider.addTreatment(patient.id); // Remove await
+                    // Get the input values
+                    String bodyPart = treatmentProvider.bodyPartController.text.trim();
+                    String treatment = treatmentProvider.treatmentController.text.trim();
+                    String price = treatmentProvider.priceController.text.trim();
+
+                    // Define regex patterns
+                    RegExp validText = RegExp(r"^[a-zA-Z0-9\s]+$"); // Letters, numbers, and spaces only
+                    RegExp validPrice = RegExp(r"^\d+(\.\d{1,2})?$"); // Only numbers (integer or decimal)
+
+                    // Validate inputs
+                    if (bodyPart.isEmpty || treatment.isEmpty || price.isEmpty) {
+                      showErrorDialog(context, "Todos los campos son obligatorios.");
+                      return;
+                    }
+                    if (!validText.hasMatch(bodyPart)) {
+                      showErrorDialog(context, "La 'Parte del Cuerpo' solo puede contener letras, números y espacios.");
+                      return;
+                    }
+                    if (!validText.hasMatch(treatment)) {
+                      showErrorDialog(context, "El 'Tratamiento' solo puede contener letras, números y espacios.");
+                      return;
+                    }
+                    if (!validPrice.hasMatch(price)) {
+                      showErrorDialog(context, "El 'Precio' debe ser un número válido.");
+                      return;
+                    }
+
+                    // If all validations pass, add the treatment
+                    treatmentProvider.addTreatment(patient.id);
                   },
                 ),
+
                 const SizedBox(height: 20),
 
                 // List of Treatment Cards

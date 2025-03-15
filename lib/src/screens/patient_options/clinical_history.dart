@@ -130,6 +130,33 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
                       ],
                     ),
                   ),
+                                   Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+  patient.id,
+  style: TextStyle(
+    color: Colors.white,
+    fontSize: 22,
+    fontWeight: FontWeight.bold,
+  ),
+  overflow: TextOverflow.ellipsis,
+),
+                        ),
+                      ],
+                    ),
+                  ),
+              
+    
                   const SizedBox(height: 20),
                   // Historia Clínica input field
                   Consumer<ClinicalHistoryProvider>(
@@ -211,7 +238,13 @@ Consumer<ClinicalHistoryProvider>(
                           ),
                           onPressed: () async {
                             final provider = Provider.of<ClinicalHistoryProvider>(context, listen: false);
-                            bool success = await provider.createClinicalHistory(patient.id);
+                            int? patientId = int.tryParse(patient.id);
+                          if (patientId == null) {
+                          debugPrint("Invalid patient ID format: ${patient.id}");
+                              return;
+                            }
+                          bool success = await provider.createClinicalHistory(patientId);
+    
 
                             if (!context.mounted) return;
 

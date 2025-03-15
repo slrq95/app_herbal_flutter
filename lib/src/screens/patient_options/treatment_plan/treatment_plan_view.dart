@@ -145,10 +145,10 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                       height: 200,
                                       width: 300,
                                       child:                   Text(
-                                            '💊 notas : ${treatment['note']}',
+                                            '💊 Notas : ${treatment['note']}',
                                             style: const TextStyle(
                                               color: CustomTheme.lettersColor,
-                                              fontSize: 18,
+                                              fontSize: 24,
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
@@ -183,11 +183,12 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
-                                            '📅 acualizado en : ${DateTime.parse(treatment['updated_at']).toLocal()}',
+                                            '📅 Actualizado en: ${treatment['updated_at'] != null && treatment['updated_at'].isNotEmpty 
+                                                ? DateTime.parse(treatment['updated_at']).toLocal()
+                                                : "No actualizado aún"}',
                                             style: const TextStyle(color: Colors.white70, fontSize: 22),
                                           ),
-                                                        
-
+                                                  
                                           const SizedBox(height: 10),
                                           Row(
                                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -209,8 +210,6 @@ if (viewProvider.treatmentPlans.isEmpty) {
                                         ],
                                       ),
                                     ),
-                        
-                              
                             );
                           },
                         );

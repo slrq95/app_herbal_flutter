@@ -48,7 +48,7 @@ class SelectedPatientProvider extends ChangeNotifier {
   Patient? get selectedPatient => _selectedPatient;
   Patient? get selectedId =>_selectedId;
 
-void selectPatient(Patient patient, String id) { // ✅ Change `id` to String
+void selectPatient(Patient patient, dynamic id) { // ✅ Change `id` to String
   _selectedPatient = patient;
   notifyListeners();
 }

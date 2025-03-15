@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
 import 'package:app_herbal_flutter/src/api/provider/payment_services/payment_provider.dart';
 import 'package:app_herbal_flutter/src/theme/default.dart';

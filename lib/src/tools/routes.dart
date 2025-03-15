@@ -3,6 +3,9 @@ import 'package:app_herbal_flutter/src/screens/login_screen.dart';
 
 import 'package:app_herbal_flutter/src/screens/options_screen/options_screen.dart';
 import 'package:app_herbal_flutter/src/screens/patient_options/appointment_screen.dart';
+import 'package:app_herbal_flutter/src/screens/patient_options/laboratories/laboratory.dart';
+import 'package:app_herbal_flutter/src/screens/patient_options/laboratories/laboratory_view.dart';
+import 'package:app_herbal_flutter/src/screens/patient_options/odontrogram.dart';
 
 
 import 'package:app_herbal_flutter/src/screens/patient_options/payment_history_screen.dart';
@@ -62,6 +65,20 @@ case '/TreatmentPlanView':
 case'/PaymentViewScreen':
     return MaterialPageRoute(builder: (_) =>  const PaymentViewScreen());
 
+  case'/OdontogramPage':
+    return MaterialPageRoute(builder: (_) =>  const OdotogramScreen());
+
+  case'/LaboratoryPage':
+    return MaterialPageRoute(builder: (_) =>  const LaboratoryScreen());
+
+case '/LaboratoryViewPage':
+  final dynamic patientId = settings.arguments as dynamic; // Retrieve patientId from arguments
+  if (patientId == null) {
+    return _errorRoute(); // Redirect to error page if patientId is null
+  }
+  return MaterialPageRoute(
+    builder: (_) => LaboratoryView(patientId: patientId),
+  );
   default:
     _errorRoute();
     }

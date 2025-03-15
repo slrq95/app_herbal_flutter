@@ -38,4 +38,25 @@ class ClinicalHistoryService {
       return false;
     }
   }
+    static Future<bool> updateClinicalHistory(int patientId, String clinicalHistory, String patientCharacteristics, String consultReason) async {
+    try {
+      final dioService = DioService();
+
+      Map<String, dynamic> clinicalHistoryData = {
+        "clinical_history": clinicalHistory,
+        "patient_characteristics": {
+          "details": patientCharacteristics,
+        }, // Fixed field structure
+        "consult_reason": consultReason,
+      };
+
+      final response = await dioService.putClinicalHistory(patientId, clinicalHistoryData);
+
+      return response != null && response.statusCode == 200;
+    } catch (e) {
+      debugPrint("Error updating clinical history: $e");
+      return false;
+    }
+  }
 }
+

@@ -35,6 +35,17 @@ void showPopupMenu(BuildContext context,Patient patient) { // Accept patient
                 Navigator.pushNamed(context, '/AppointmentPage');
               },
             ),
+                        _buildMenuItem(
+              icon: Icons.home_work,
+              text: "Laboratorio",
+              onTap: () {
+  final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
+  selectedPatientProvider.selectPatient(patient, patient.id);
+                Navigator.pushNamed(context, '/LaboratoryPage'
+                  
+                );
+              },
+            ),
             _buildMenuItem(
               icon: Icons.person,
               text: "Ficha Clinica",
@@ -69,6 +80,7 @@ Navigator.pushNamed(context, '/PaymentHistoryPage', arguments: patient.id);
           ],
         ),
       );
+      
     },
   );
 }

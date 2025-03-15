@@ -131,6 +131,34 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                                    // Display patient name
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: CustomTheme.containerColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.person, color: Colors.white),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            patient.id,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   // Historia Clínica input field
                   Consumer<ClinicalHistoryProvider>(
                     builder: (context, provider, child) {
@@ -180,16 +208,16 @@ class ClinicalHistoryPageState extends State<ClinicalHistoryPage> {
                     fontSize: 22,
                   );}),
                   const SizedBox(height: 30),
-Consumer<ClinicalHistoryProvider>(
-  builder: (context, provider, child) {
-    return CustomButton(
-      text: ' Odontograma',
-      onPressed: () {
-        Navigator.pushNamed(context, '/OdontogramPage');
-      },
-    );
-  },
-),
+                  Consumer<ClinicalHistoryProvider>(
+                    builder: (context, provider, child) {
+                      return CustomButton(
+                        text: ' Odontograma',
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/OdontogramPage');
+                        },
+                      );
+                    },
+                  ),
                   const SizedBox(height: 30),
                 Consumer<ClinicalHistoryProvider>(
                   builder: (context, provider, child) {
@@ -211,7 +239,7 @@ Consumer<ClinicalHistoryProvider>(
                           ),
                           onPressed: () async {
                             final provider = Provider.of<ClinicalHistoryProvider>(context, listen: false);
-                            bool success = await provider.createClinicalHistory(patient.id);
+                            bool success = await provider.createClinicalHistory(int.parse(patient.id));
 
                             if (!context.mounted) return;
 
@@ -239,11 +267,22 @@ Consumer<ClinicalHistoryProvider>(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
-                          onPressed: () {
-                            // Handle the update logic here
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Funcionalidad de actualizar datos pendiente")),
-                            );
+                          onPressed: () async {
+                            final provider = Provider.of<ClinicalHistoryProvider>(context, listen: false);
+                            bool success = await provider.updateClinicalHistory(int.parse(patient.id));
+
+                            if (!context.mounted) return;
+
+                            if (success) {
+                              Navigator.pushNamed(context, '/home');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Historia Clínica actualizada con éxito!")),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("Error al guardar los datos")),
+                              );
+                            }
                           },
                         ),
                     ],
