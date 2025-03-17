@@ -5,18 +5,11 @@ import 'package:app_herbal_flutter/src/theme/default.dart';
 import 'package:flutter/material.dart';
 import 'package:app_herbal_flutter/src/api/bottom_nav_index_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
 
 class PaginaPrincipal extends StatelessWidget {
   const PaginaPrincipal({super.key});
 
-  Future<void> signOut(BuildContext context) async {
-    final authProvider = Provider.of<DioAuthProvider>(context, listen: false);
-    await authProvider.logout(); // Remove token
 
-    if (!context.mounted) return;
-    Navigator.of(context).pushReplacementNamed('/signin'); // Navigate to login
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +40,7 @@ class PaginaPrincipal extends StatelessWidget {
                   children: [
                     IconButton(
                       
-                      onPressed: () => signOut(context), // Trigger sign-out
+                      onPressed: () => {}, // Trigger sign-out
                       icon: Hero(
                         tag: 'signOutIcon',
                         child: Image.asset(

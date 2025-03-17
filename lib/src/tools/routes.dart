@@ -23,12 +23,12 @@ import 'package:flutter/material.dart';
 class MedicalRoute{
   static Route onGenerateRoute(RouteSettings settings){
 switch(settings.name){
-  case'/':
-    return MaterialPageRoute(builder: (_) => const SplashPage());
+ // case'/':
+  //  return MaterialPageRoute(builder: (_) => const SplashPage());
   case'/home':
     return MaterialPageRoute(builder: (_) => const PaginaPrincipal());
-  case'/signin':
-  return MaterialPageRoute(builder: (_) => const SigninPage());  
+ // case'/signin':
+  // return MaterialPageRoute(builder: (_) => const SigninPage());  
   
   case'/PatientPage':
     return MaterialPageRoute(builder: (_) => const PantientPage());

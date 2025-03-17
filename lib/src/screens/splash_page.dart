@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
+//import 'package:provider/provider.dart';
+//import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -22,11 +22,11 @@ class _SplashPageState extends State<SplashPage> {
 
     if (!mounted) return; // Ensure widget is still in the tree
 
-    final authProvider = context.read<DioAuthProvider>();
+   // final authProvider = context.read<DioAuthProvider>();
 
-    final route = authProvider.isAuthenticated ? '/home' : '/signin';
+   // final route = authProvider.isAuthenticated ? '/home' : '/signin';
     if (mounted) {
-      Navigator.of(context).pushReplacementNamed(route);
+   //   Navigator.of(context).pushReplacementNamed(route);
     }
   }
 

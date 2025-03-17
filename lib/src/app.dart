@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:app_herbal_flutter/src/api/provider/payment_services/payment_provider.dart';
 import 'package:app_herbal_flutter/src/api/provider/treatment_plan_services/treatment_view_provider.dart';
-import 'package:app_herbal_flutter/src/api/provider/auth_services/auth_provider.dart';
+
 import 'package:app_herbal_flutter/src/api/provider/appointement_services/appointment_provider.dart';
 class Appstate extends StatelessWidget{
   const Appstate({super.key});
@@ -26,7 +26,7 @@ class Appstate extends StatelessWidget{
           create:(_) =>Bottomnavindexprovider(),
         ),
         ChangeNotifierProvider(create: (_) => PaymentProvider()),
-        ChangeNotifierProvider(create: (_) => DioAuthProvider()),
+
         ChangeNotifierProvider(create: (_) => PatientProvider()),
         ChangeNotifierProvider(create: (_) => DashboardProvider()),
         ChangeNotifierProvider(create: (_) => AppointmentProvider()),
@@ -57,7 +57,7 @@ class MedicalApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      initialRoute: '/',
+      initialRoute: '/home',
       onGenerateRoute: MedicalRoute.onGenerateRoute,
       debugShowCheckedModeBanner: false,
     );
