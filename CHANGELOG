@@ -79,3 +79,344 @@ void initState() {
   });
 }
 
+18/04/2025 1:35
+
+CREATE TABLE odontogram (
+    id_odontogram SERIAL PRIMARY KEY,
+    id_patient INT,
+    top_notes TEXT,
+    bottom_notes TEXT,
+    odontogram_draw JSONB,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+// POST: Insert a new odontogram record
+app.post("/add_odontogram", async (req, res) => {
+  try {
+    const { id_patient, top_notes, bottom_notes, odontogram_draw } = req.body;
+
+    const result = await pool.query(
+      "INSERT INTO odontogram (id_patient, top_notes, bottom_notes, odontogram_draw, created_at, updated_at) VALUES ($1, $2, $3, $4::jsonb, NOW(), NOW()) RETURNING *",
+      [id_patient, top_notes, bottom_notes, JSON.stringify(odontogram_draw)]
+    );
+
+    console.log("Inserted Odontogram Record:", result.rows[0]);
+
+    res.status(201).json({
+      message: "Odontogram record inserted successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error inserting odontogram record:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// service
+import 'package:dio/dio.dart';
+
+class OdontogramService {
+  final Dio _dio = Dio(BaseOptions(baseUrl: "http://localhost:3000"));
+
+  Future<Map<String, dynamic>?> addOdontogram({
+    required int idPatient,
+    required String topNotes,
+    required String bottomNotes,
+    required List<Map<String, dynamic>> odontogramDraw,
+  }) async {
+    try {
+      final response = await _dio.post("/add_odontogram", data: {
+        "id_patient": idPatient,
+        "top_notes": topNotes,
+        "bottom_notes": bottomNotes,
+        "odontogram_draw": odontogramDraw,
+      });
+
+      return response.data;
+    } catch (error) {
+      print("Error adding odontogram: $error");
+      return null;
+    }
+  }
+}
+
+//provider
+import 'package:flutter/material.dart';
+import 'package:app_herbal_flutter/src/api/provider/odontogram_services/odontogram_service.dart';
+
+class OdontogramProvider extends ChangeNotifier {
+  final OdontogramService _service = OdontogramService();
+  bool isLoading = false;
+  String? errorMessage;
+
+  Future<void> saveOdontogram({
+    required int idPatient,
+    required String topNotes,
+    required String bottomNotes,
+    required List<Map<String, dynamic>> odontogramDraw,
+  }) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final response = await _service.addOdontogram(
+      idPatient: idPatient,
+      topNotes: topNotes,
+      bottomNotes: bottomNotes,
+      odontogramDraw: odontogramDraw,
+    );
+
+    if (response == null) {
+      errorMessage = "Failed to save odontogram";
+    }
+
+    isLoading = false;
+    notifyListeners();
+  }
+}
+
+// odontogram.dart
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:app_herbal_flutter/src/theme/default.dart';
+import 'package:app_herbal_flutter/src/api/provider/odontogram_services/odontogram_provider.dart';
+import 'package:app_herbal_flutter/src/api/provider/patient_services/patient_provider.dart';
+
+class OdontogramScreen extends StatefulWidget {
+  const OdontogramScreen({super.key});
+
+  @override
+  OdontogramScreenState createState() => OdontogramScreenState();
+}
+
+class OdontogramScreenState extends State<OdontogramScreen> {
+  List<Offset> points = [];
+  final GlobalKey _imageKey = GlobalKey();
+  final TextEditingController topNotesController = TextEditingController();
+  final TextEditingController bottomNotesController = TextEditingController();
+
+  void _addPoint(DragUpdateDetails details) {
+    final RenderBox? renderBox = _imageKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      Offset localOffset = renderBox.globalToLocal(details.globalPosition);
+      setState(() {
+        points.add(localOffset);
+      });
+    }
+  }
+
+  void _clearAll() {
+    setState(() {
+      points.clear();
+      topNotesController.clear();
+      bottomNotesController.clear();
+    });
+  }
+
+void _saveOdontogram() async {
+  final odontogramProvider = Provider.of<OdontogramProvider>(context, listen: false);
+  final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context, listen: false);
+  final patient = selectedPatientProvider.selectedPatient;
+
+  if (patient == null || patient.id.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Error: No patient selected")),
+    );
+    return;
+  }
+
+  int? patientId = int.tryParse(patient.id); // Convert String to int safely
+
+  if (patientId == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Error: Invalid patient ID")),
+    );
+    return;
+  }
+
+  List<Map<String, dynamic>> odontogramDraw = points
+      .where((point) => point != Offset.infinite)
+      .map((point) => {"x": point.dx, "y": point.dy})
+      .toList();
+
+  await odontogramProvider.saveOdontogram(
+    idPatient: patientId, // Now it's an int
+    topNotes: topNotesController.text,
+    bottomNotes: bottomNotesController.text,
+    odontogramDraw: odontogramDraw,
+  );
+
+  if (odontogramProvider.errorMessage != null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: ${odontogramProvider.errorMessage}")),
+    );
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Odontogram saved successfully!")),
+    );
+  }
+}
+
+
+  @override
+  void dispose() {
+    topNotesController.dispose();
+    bottomNotesController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedPatientProvider = Provider.of<SelectedPatientProvider>(context);
+    final patient = selectedPatientProvider.selectedPatient;
+
+    return Scaffold(
+      backgroundColor: CustomTheme.fillColor,
+      appBar: AppBar(
+        title: const Text('Odontograma'),
+        backgroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.save, color: Colors.purple),
+            onPressed: _saveOdontogram,
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          if (patient != null) ...[
+            _buildPatientInfo("Patient Name", patient.name),
+            _buildPatientInfo("Patient ID", patient.id.toString()),
+          ] else ...[
+            _buildPatientInfo("No patient selected", ""),
+          ],
+          _buildNotesField(topNotesController, 'Apuntes (Parte superior)'),
+          Expanded(
+            child: GestureDetector(
+              onPanUpdate: _addPoint,
+              onPanEnd: (details) => setState(() {
+                points.add(Offset.infinite);
+              }),
+              child: Center(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: InteractiveViewer(
+                        minScale: 1.0,
+                        maxScale: 3.0,
+                        child: Center(
+                          child: Image.asset(
+                            'lib/src/assets/images/odontograma.jpg',
+                            key: _imageKey,
+                            fit: BoxFit.contain,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned.fill(
+                      child: CustomPaint(painter: OdontogramPainter(points)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          _buildNotesField(bottomNotesController, 'Apuntes (Parte inferior)'),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.purple,
+        onPressed: _clearAll,
+        child: const Icon(Icons.refresh, color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildPatientInfo(String label, String value) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: CustomTheme.containerColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.person, color: Colors.white),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              "$label: $value",
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+  Widget _buildNotesField(TextEditingController controller, String label) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        style: const TextStyle(fontSize: 22.0, color: Colors.white),
+        controller: controller,
+        maxLines: 3,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: const TextStyle(color: Colors.white70),
+          filled: true,
+          fillColor: const Color(0xFF1E1E1E),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.white30),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.white30),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0),
+            borderSide: const BorderSide(color: Colors.purple),
+          ),
+        ),
+      ),
+    );
+  }
+
+class OdontogramPainter extends CustomPainter {
+  final List<Offset> points;
+  OdontogramPainter(this.points);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = Colors.purple
+      ..strokeWidth = 4.0
+      ..strokeCap = StrokeCap.round;
+
+    for (int i = 0; i < points.length - 1; i++) {
+      if (points[i] != Offset.infinite && points[i + 1] != Offset.infinite) {
+        canvas.drawLine(points[i], points[i + 1], paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(OdontogramPainter oldDelegate) => true;
+}
+
+
+
+
+
+
