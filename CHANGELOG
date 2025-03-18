@@ -45,3 +45,37 @@ Improving UI/UX to show payments with created_at timestamp and notes, thinking h
 28/02/2025 11:41PM 
 Handling appointment reschedule without affecting logic, fetching data or relationships between tables, removing cards when appointment is changed and inmedialty UI refresh, when user mark as attended or not attended data can´t be updated anymore, user can mark only once, after mark, appointment won't change status, still researching and learning about docker and git troubleshooting and common errors
 
+
+
+  @override
+void initState() {
+  super.initState();
+
+  WidgetsBinding.instance.addPostFrameCallback((_) async {
+    if (widget.patientId != null && !hasFetchedData) {
+      hasFetchedData = true;
+
+      final patientId = widget.patientId is Map<String, String>
+          ? widget.patientId['patientId'] ?? ''
+          : widget.patientId.toString();
+
+      final provider = Provider.of<LaboratoryViewProvider>(context, listen: false);
+
+      print("Fetching laboratory data for patient ID: $patientId");
+      await provider.fetchLaboratoryData(int.parse(patientId));
+
+      // Ensure navigation only happens once
+      if (provider.laboratoryData.isEmpty && provider.errorMessage != null && mounted) {
+        hasNavigated = true;
+
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            hasFetchedData = false; // Reset the flag for future fetches
+            Navigator.of(context).pushReplacementNamed('/home');
+          }
+        });
+      }
+    }
+  });
+}
+
